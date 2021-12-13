@@ -18,7 +18,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 
 	private final ManufacturerRepository manufacturerRepository;
 
-	public ManufacturerServiceImpl(@Qualifier("inMemoryMemoryRepositoryImpl") ManufacturerRepository manufacturerRepository) {
+	public ManufacturerServiceImpl(@Qualifier("inMemoryManufacturerRepositoryImpl") ManufacturerRepository manufacturerRepository) {
 		this.manufacturerRepository = manufacturerRepository;
 	}
 

@@ -11,10 +11,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component
-@Qualifier("inMemoryMemoryRepositoryImpl")
-public class InMemoryManufacturer implements ManufacturerRepository {
+@Qualifier("inMemoryManufacturerRepositoryImpl")
+public class InMemoryManufacturerRepository implements ManufacturerRepository {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryManufacturer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryManufacturerRepository.class);
 
 	private final Map<Long, ManufacturerDto> manufacturerMap = new HashMap<>();
 	private final AtomicLong currentId = new AtomicLong();
