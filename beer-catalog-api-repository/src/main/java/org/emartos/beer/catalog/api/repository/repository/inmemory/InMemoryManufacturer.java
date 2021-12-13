@@ -42,13 +42,13 @@ public class InMemoryManufacturer implements ManufacturerRepository {
 	}
 
 	@Override
-	public ManufacturerDto findById(Long id) {
+	public Optional<ManufacturerDto> findById(Long id) {
 		LOGGER.debug(">> findById() id {}", id);
 
-		ManufacturerDto manufacturerDto = manufacturerMap.computeIfAbsent(id, s -> new ManufacturerDto());
+		Optional<ManufacturerDto> manufacturerDtoOptional = Optional.ofNullable(manufacturerMap.get(id));
 
-		LOGGER.debug("<< findById() manufacturerDto {}", manufacturerDto);
-		return manufacturerDto;
+		LOGGER.debug("<< findById() manufacturerDtoOptional {}", manufacturerDtoOptional);
+		return manufacturerDtoOptional;
 	}
 
 	@Override

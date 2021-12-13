@@ -8,6 +8,7 @@ package org.emartos.beer.catalog.api.repository.repository;
 import org.emartos.beer.catalog.api.repository.model.ManufacturerDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ManufacturerRepository {
 
@@ -15,7 +16,7 @@ public interface ManufacturerRepository {
 
 	List<ManufacturerDto> findAll();
 
-	ManufacturerDto findById(Long id);
+	Optional<ManufacturerDto> findById(Long id);
 
 	ManufacturerDto update(ManufacturerDto manufacturerDto);
 

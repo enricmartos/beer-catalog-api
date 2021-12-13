@@ -1,32 +1,35 @@
-package org.emartos.beer.catalog.api.core.service.impl;
+package org.emartos.beer.catalog.api.core.handler.impl;
 
+import org.emartos.beer.catalog.api.core.exception.BadRequestException;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
+import org.emartos.beer.catalog.api.core.handler.ManufacturerHandler;
 import org.emartos.beer.catalog.api.core.service.ManufacturerService;
 import org.emartos.beer.catalog.api.repository.model.ManufacturerDto;
-import org.emartos.beer.catalog.api.repository.repository.ManufacturerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static org.emartos.beer.catalog.api.core.helper.ManufacturerValidationHelper.validateManufacturer;
+
 @Service
-public class ManufacturerServiceImpl implements ManufacturerService {
+public class ManufacturerHandlerImpl implements ManufacturerHandler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ManufacturerHandlerImpl.class);
 
-	private final ManufacturerRepository manufacturerRepository;
+	private final ManufacturerService manufacturerService;
 
-	public ManufacturerServiceImpl(@Qualifier("inMemoryMemoryRepositoryImpl") ManufacturerRepository manufacturerRepository) {
-		this.manufacturerRepository = manufacturerRepository;
+	public ManufacturerHandlerImpl(ManufacturerService manufacturerService) {
+		this.manufacturerService = manufacturerService;
 	}
 
 	@Override
-	public ManufacturerDto createManufacturer(ManufacturerDto manufacturerDto) {
+	public ManufacturerDto createManufacturer(ManufacturerDto manufacturerDto) throws BadRequestException {
 		LOGGER.debug(">> createManufacturer() manufacturerDto {}", manufacturerDto);
 
-		ManufacturerDto manufacturerDtoPersisted = manufacturerRepository.create(manufacturerDto);
+		validateManufacturer(manufacturerDto);
+		ManufacturerDto manufacturerDtoPersisted = manufacturerService.createManufacturer(manufacturerDto);
 
 		LOGGER.debug("<< createManufacturer() ManufacturerDtoPersisted {}", manufacturerDtoPersisted);
 		return manufacturerDtoPersisted;
@@ -36,7 +39,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public List<ManufacturerDto> getAllManufacturers() {
 		LOGGER.debug(">> getAllManufacturers()");
 
-		List<ManufacturerDto> manufacturerDtoList = manufacturerRepository.findAll();
+		List<ManufacturerDto> manufacturerDtoList = manufacturerService.getAllManufacturers();
 
 		LOGGER.debug("<< getAllManufacturers() manufacturerDtoList {}", manufacturerDtoList);
 		return manufacturerDtoList;
@@ -46,21 +49,18 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public ManufacturerDto getManufacturerById(Long id) throws NotFoundException {
 		LOGGER.debug(">> getManufacturerById() id {}", id);
 
-		ManufacturerDto manufacturerDto = manufacturerRepository.findById(id).orElseThrow(NotFoundException::new);
+		ManufacturerDto manufacturerDto = manufacturerService.getManufacturerById(id);
 
 		LOGGER.debug("<< getManufacturerById() manufacturerDto {}", manufacturerDto);
 		return manufacturerDto;
 	}
 
 	@Override
-	public ManufacturerDto updateManufacturer(ManufacturerDto manufacturerDto) throws NotFoundException {
+	public ManufacturerDto updateManufacturer(ManufacturerDto manufacturerDto) throws NotFoundException, BadRequestException {
 		LOGGER.debug(">> updateManufacturer() manufacturerDto {}", manufacturerDto);
 
-		if (manufacturerRepository.findById(manufacturerDto.getId()).isEmpty()) {
-			throw new NotFoundException();
-		}
-
-		ManufacturerDto manufacturerDtoPersisted = manufacturerRepository.update(manufacturerDto);
+		validateManufacturer(manufacturerDto);
+		ManufacturerDto manufacturerDtoPersisted = manufacturerService.updateManufacturer(manufacturerDto);
 
 		LOGGER.debug("<< updateManufacturer() ManufacturerDtoPersisted {}", manufacturerDtoPersisted);
 		return manufacturerDtoPersisted;
@@ -70,11 +70,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public boolean deleteManufacturerById(Long id) throws NotFoundException {
 		LOGGER.debug(">> deleteManufacturerById() id {}", id);
 
-		if (manufacturerRepository.findById(id).isEmpty()) {
-			throw new NotFoundException();
-		}
-
-		boolean deleted = manufacturerRepository.deleteById(id);
+		boolean deleted = manufacturerService.deleteManufacturerById(id);
 
 		LOGGER.debug("<< deleteManufacturerById() deleted {}", deleted);
 		return deleted;
