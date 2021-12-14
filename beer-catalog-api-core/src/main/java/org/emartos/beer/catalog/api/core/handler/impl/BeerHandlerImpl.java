@@ -5,6 +5,8 @@ import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.handler.BeerHandler;
 import org.emartos.beer.catalog.api.core.helper.BeerValidationHelper;
 import org.emartos.beer.catalog.api.core.service.BeerService;
+import org.emartos.beer.catalog.api.core.service.BeerTypeService;
+import org.emartos.beer.catalog.api.core.service.ManufacturerService;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,13 @@ public class BeerHandlerImpl implements BeerHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BeerHandlerImpl.class);
 
 	private final BeerService beerService;
+	private final ManufacturerService manufacturerService;
+	private final BeerTypeService beerTypeService;
 
-	public BeerHandlerImpl(BeerService beerService) {
+	public BeerHandlerImpl(BeerService beerService, ManufacturerService manufacturerService, BeerTypeService beerTypeService) {
 		this.beerService = beerService;
+		this.manufacturerService = manufacturerService;
+		this.beerTypeService = beerTypeService;
 	}
 
 	@Override
@@ -79,7 +85,17 @@ public class BeerHandlerImpl implements BeerHandler {
 
 	private void validateBeer(BeerDto beerDto) throws BadRequestException {
 		BeerValidationHelper.validateBeer(beerDto);
-		// TODO: Check if exists beer type and manufacturer
+		try {
+			manufacturerService.getManufacturerById(beerDto.getManufacturerId());
+		} catch (NotFoundException e) {
+			throw new BadRequestException(String.format("Manufacturer with id %s does not exist", beerDto.getManufacturerId()));
+		}
+
+		try {
+			beerTypeService.getBeerTypeById(beerDto.getBeerTypeId());
+		} catch (NotFoundException e) {
+			throw new BadRequestException(String.format("Beer Type with id %s does not exist", beerDto.getBeerTypeId()));
+		}
 	}
 
 	// endregion

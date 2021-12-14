@@ -14,9 +14,9 @@ public interface BeerRepository {
 
 	BeerDto create(BeerDto manufacturerDto);
 
-	List<BeerDto> findAll();
+	List<BeerDto> getAll();
 
-	Optional<BeerDto> findById(Long id);
+	Optional<BeerDto> getById(Long id);
 
 	BeerDto update(BeerDto manufacturerDto);
 

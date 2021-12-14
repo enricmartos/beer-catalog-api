@@ -18,7 +18,7 @@ public class BeerTypeServiceImpl implements BeerTypeService {
 
 	private final BeerTypeRepository beerTypeRepository;
 
-	public BeerTypeServiceImpl(@Qualifier("inMemoryBeerTypeRepositoryImpl") BeerTypeRepository beerTypeRepository) {
+	public BeerTypeServiceImpl(@Qualifier("jpaBeerTypeRepositoryImpl") BeerTypeRepository beerTypeRepository) {
 		this.beerTypeRepository = beerTypeRepository;
 	}
 
@@ -36,7 +36,7 @@ public class BeerTypeServiceImpl implements BeerTypeService {
 	public List<BeerTypeDto> getAllBeerTypes() {
 		LOGGER.debug(">> getAllBeerTypes()");
 
-		List<BeerTypeDto> beerTypeDtoList = beerTypeRepository.findAll();
+		List<BeerTypeDto> beerTypeDtoList = beerTypeRepository.getAll();
 
 		LOGGER.debug("<< getAllBeerTypes() beerTypeDtoList {}", beerTypeDtoList);
 		return beerTypeDtoList;
@@ -46,7 +46,7 @@ public class BeerTypeServiceImpl implements BeerTypeService {
 	public BeerTypeDto getBeerTypeById(Long id) throws NotFoundException {
 		LOGGER.debug(">> getBeerTypeById() id {}", id);
 
-		BeerTypeDto beerTypeDto = beerTypeRepository.findById(id).orElseThrow(NotFoundException::new);
+		BeerTypeDto beerTypeDto = beerTypeRepository.getById(id).orElseThrow(NotFoundException::new);
 
 		LOGGER.debug("<< getBeerTypeById() beerTypeDto {}", beerTypeDto);
 		return beerTypeDto;
@@ -56,7 +56,7 @@ public class BeerTypeServiceImpl implements BeerTypeService {
 	public BeerTypeDto updateBeerType(BeerTypeDto beerTypeDto) throws NotFoundException {
 		LOGGER.debug(">> updateBeerType() beerTypeDto {}", beerTypeDto);
 
-		if (beerTypeRepository.findById(beerTypeDto.getId()).isEmpty()) {
+		if (beerTypeRepository.getById(beerTypeDto.getId()).isEmpty()) {
 			throw new NotFoundException();
 		}
 
@@ -70,7 +70,7 @@ public class BeerTypeServiceImpl implements BeerTypeService {
 	public boolean deleteBeerTypeById(Long id) throws NotFoundException {
 		LOGGER.debug(">> deleteBeerTypeById() id {}", id);
 
-		if (beerTypeRepository.findById(id).isEmpty()) {
+		if (beerTypeRepository.getById(id).isEmpty()) {
 			throw new NotFoundException();
 		}
 

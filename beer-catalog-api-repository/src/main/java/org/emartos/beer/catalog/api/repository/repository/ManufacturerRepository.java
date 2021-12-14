@@ -14,9 +14,9 @@ public interface ManufacturerRepository {
 
 	ManufacturerDto create(ManufacturerDto manufacturerDto);
 
-	List<ManufacturerDto> findAll();
+	List<ManufacturerDto> getAll();
 
-	Optional<ManufacturerDto> findById(Long id);
+	Optional<ManufacturerDto> getById(Long id);
 
 	ManufacturerDto update(ManufacturerDto manufacturerDto);
 

@@ -15,7 +15,7 @@ public class BeerDto {
 	private String name;
 	private String description;
 	private Float graduation;
-	private BeerTypeDto beerType;
-	private ManufacturerDto manufacturerDto;
+	private Long beerTypeId;
+	private Long manufacturerId;
 
 }

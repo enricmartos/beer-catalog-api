@@ -32,7 +32,7 @@ public class InMemoryManufacturerRepository implements ManufacturerRepository {
 	}
 
 	@Override
-	public List<ManufacturerDto> findAll() {
+	public List<ManufacturerDto> getAll() {
 		LOGGER.debug(">> findAll()");
 
 		List<ManufacturerDto> manufacturerDtoList = new ArrayList<> (manufacturerMap.values());
@@ -42,7 +42,7 @@ public class InMemoryManufacturerRepository implements ManufacturerRepository {
 	}
 
 	@Override
-	public Optional<ManufacturerDto> findById(Long id) {
+	public Optional<ManufacturerDto> getById(Long id) {
 		LOGGER.debug(">> findById() id {}", id);
 
 		Optional<ManufacturerDto> manufacturerDtoOptional = Optional.ofNullable(manufacturerMap.get(id));

@@ -18,7 +18,7 @@ public class BeerServiceImpl implements BeerService {
 
 	private final BeerRepository beerRepository;
 
-	public BeerServiceImpl(@Qualifier("inMemoryBeerRepositoryImpl") BeerRepository beerRepository) {
+	public BeerServiceImpl(@Qualifier("jpaBeerRepositoryImpl") BeerRepository beerRepository) {
 		this.beerRepository = beerRepository;
 	}
 
@@ -36,7 +36,7 @@ public class BeerServiceImpl implements BeerService {
 	public List<BeerDto> getAllBeers() {
 		LOGGER.debug(">> getAllBeers()");
 
-		List<BeerDto> beerDtoList = beerRepository.findAll();
+		List<BeerDto> beerDtoList = beerRepository.getAll();
 
 		LOGGER.debug("<< getAllBeers() beerDtoList {}", beerDtoList);
 		return beerDtoList;
@@ -46,7 +46,7 @@ public class BeerServiceImpl implements BeerService {
 	public BeerDto getBeerById(Long id) throws NotFoundException {
 		LOGGER.debug(">> getBeerById() id {}", id);
 
-		BeerDto beerDto = beerRepository.findById(id).orElseThrow(NotFoundException::new);
+		BeerDto beerDto = beerRepository.getById(id).orElseThrow(NotFoundException::new);
 
 		LOGGER.debug("<< getBeerById() beerDto {}", beerDto);
 		return beerDto;
@@ -56,7 +56,7 @@ public class BeerServiceImpl implements BeerService {
 	public BeerDto updateBeer(BeerDto beerDto) throws NotFoundException {
 		LOGGER.debug(">> updateBeer() beerDto {}", beerDto);
 
-		if (beerRepository.findById(beerDto.getId()).isEmpty()) {
+		if (beerRepository.getById(beerDto.getId()).isEmpty()) {
 			throw new NotFoundException();
 		}
 
@@ -70,7 +70,7 @@ public class BeerServiceImpl implements BeerService {
 	public boolean deleteBeerById(Long id) throws NotFoundException {
 		LOGGER.debug(">> deleteBeerById() id {}", id);
 
-		if (beerRepository.findById(id).isEmpty()) {
+		if (beerRepository.getById(id).isEmpty()) {
 			throw new NotFoundException();
 		}
 

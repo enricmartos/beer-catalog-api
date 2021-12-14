@@ -21,6 +21,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 	// region ExceptionHandler methods
 
+	@ExceptionHandler(BadRequestException.class)
+	public ResponseEntity<Object> handleBadRequestException(BadRequestException ex) {
+		LOGGER_ADVISOR.debug(">> handleBadRequestException()");
+
+		Map<String, Object> body = getExceptionBody(ex.getMessage());
+
+		LOGGER_ADVISOR.debug("<< handleBadRequestException() responseBody {}", body);
+		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<Object> handleNotFoundException(NotFoundException ex) {
 		LOGGER_ADVISOR.debug(">> handleNotFoundException()");
@@ -32,7 +42,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(BeerCatalogApiException.class)
-	public ResponseEntity<Object> handleLotterySystemException(BeerCatalogApiException ex) {
+	public ResponseEntity<Object> handleBeerCatalogApiException(BeerCatalogApiException ex) {
 		LOGGER_ADVISOR.debug(">> handleBeerCatalogApiException()");
 
 		Map<String, Object> body = getExceptionBody(ex.getMessage());

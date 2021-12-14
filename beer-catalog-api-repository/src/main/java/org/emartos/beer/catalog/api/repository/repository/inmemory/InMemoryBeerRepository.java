@@ -32,7 +32,7 @@ public class InMemoryBeerRepository implements BeerRepository {
 	}
 
 	@Override
-	public List<BeerDto> findAll() {
+	public List<BeerDto> getAll() {
 		LOGGER.debug(">> findAll()");
 
 		List<BeerDto> beerDtoList = new ArrayList<> (beerMap.values());
@@ -42,7 +42,7 @@ public class InMemoryBeerRepository implements BeerRepository {
 	}
 
 	@Override
-	public Optional<BeerDto> findById(Long id) {
+	public Optional<BeerDto> getById(Long id) {
 		LOGGER.debug(">> findById() id {}", id);
 
 		Optional<BeerDto> beerDtoOptional = Optional.ofNullable(beerMap.get(id));

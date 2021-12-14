@@ -18,7 +18,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 
 	private final ManufacturerRepository manufacturerRepository;
 
-	public ManufacturerServiceImpl(@Qualifier("inMemoryManufacturerRepositoryImpl") ManufacturerRepository manufacturerRepository) {
+	public ManufacturerServiceImpl(@Qualifier("jpaManufacturerRepositoryImpl") ManufacturerRepository manufacturerRepository) {
 		this.manufacturerRepository = manufacturerRepository;
 	}
 
@@ -36,7 +36,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public List<ManufacturerDto> getAllManufacturers() {
 		LOGGER.debug(">> getAllManufacturers()");
 
-		List<ManufacturerDto> manufacturerDtoList = manufacturerRepository.findAll();
+		List<ManufacturerDto> manufacturerDtoList = manufacturerRepository.getAll();
 
 		LOGGER.debug("<< getAllManufacturers() manufacturerDtoList {}", manufacturerDtoList);
 		return manufacturerDtoList;
@@ -46,7 +46,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public ManufacturerDto getManufacturerById(Long id) throws NotFoundException {
 		LOGGER.debug(">> getManufacturerById() id {}", id);
 
-		ManufacturerDto manufacturerDto = manufacturerRepository.findById(id).orElseThrow(NotFoundException::new);
+		ManufacturerDto manufacturerDto = manufacturerRepository.getById(id).orElseThrow(NotFoundException::new);
 
 		LOGGER.debug("<< getManufacturerById() manufacturerDto {}", manufacturerDto);
 		return manufacturerDto;
@@ -56,7 +56,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public ManufacturerDto updateManufacturer(ManufacturerDto manufacturerDto) throws NotFoundException {
 		LOGGER.debug(">> updateManufacturer() manufacturerDto {}", manufacturerDto);
 
-		if (manufacturerRepository.findById(manufacturerDto.getId()).isEmpty()) {
+		if (manufacturerRepository.getById(manufacturerDto.getId()).isEmpty()) {
 			throw new NotFoundException();
 		}
 
@@ -70,7 +70,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public boolean deleteManufacturerById(Long id) throws NotFoundException {
 		LOGGER.debug(">> deleteManufacturerById() id {}", id);
 
-		if (manufacturerRepository.findById(id).isEmpty()) {
+		if (manufacturerRepository.getById(id).isEmpty()) {
 			throw new NotFoundException();
 		}
 
