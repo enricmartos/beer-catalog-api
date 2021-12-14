@@ -5,6 +5,9 @@ import org.emartos.beer.catalog.api.repository.repository.BeerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -32,13 +35,14 @@ public class InMemoryBeerRepository implements BeerRepository {
 	}
 
 	@Override
-	public List<BeerDto> getAll() {
-		LOGGER.debug(">> findAll()");
+	public Page<BeerDto> getAll(Pageable pageable) {
+		LOGGER.debug(">> getAll()");
 
 		List<BeerDto> beerDtoList = new ArrayList<> (beerMap.values());
+		Page<BeerDto> beerDtoPage = new PageImpl<>(beerDtoList, pageable, beerDtoList.size());
 
-		LOGGER.debug("<< findById() beerDtoList {}", beerDtoList);
-		return beerDtoList;
+		LOGGER.debug("<< getAll() beerDtoPage {}", beerDtoList);
+		return beerDtoPage;
 	}
 
 	@Override

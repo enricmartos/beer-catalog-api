@@ -5,17 +5,20 @@
  */
 package org.emartos.beer.catalog.api.core.controller;
 
+import org.emartos.beer.catalog.api.core.dto.PageableResponseDto;
 import org.emartos.beer.catalog.api.core.exception.BadRequestException;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.handler.BeerHandler;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.buildPageableResponseDto;
+import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.getPageableRequest;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -41,13 +44,17 @@ public class BeerController {
 	}
 
 	@GetMapping(value = "/list", produces = APPLICATION_JSON_VALUE)
-	public List<BeerDto> getAllBeers() {
-		LOGGER.info(">> getAllBeers()");
+	public PageableResponseDto<BeerDto> getAllBeers(@RequestParam(defaultValue = "0") Integer currentPage,
+													@RequestParam(defaultValue = "3") Integer pageSize,
+													@RequestParam(defaultValue = "id,desc") String[] sort) throws BadRequestException {
+		LOGGER.info(">> getAllBeers() page {} size {} sort {}", currentPage, pageSize, sort);
 
-		List<BeerDto> beerDtoList = beerHandler.getAllBeers();
+		Pageable pageRequest = getPageableRequest(currentPage, pageSize, sort);
+		Page<BeerDto> beerDtoPage = beerHandler.getAllBeers(pageRequest);
+		PageableResponseDto<BeerDto> pageableResponseDto = buildPageableResponseDto(beerDtoPage);
 
-		LOGGER.info("<< getAllBeers() beerDtoList {}", beerDtoList);
-		return beerDtoList;
+		LOGGER.info("<< getAllBeers() pageableResponseDto {}", pageableResponseDto);
+		return pageableResponseDto;
 	}
 
 	@GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)

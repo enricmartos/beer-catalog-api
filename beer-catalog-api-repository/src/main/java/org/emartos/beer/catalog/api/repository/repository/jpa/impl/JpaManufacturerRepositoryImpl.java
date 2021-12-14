@@ -57,9 +57,7 @@ public class JpaManufacturerRepositoryImpl implements ManufacturerRepository {
 	public ManufacturerDto create(ManufacturerDto manufacturerDto) {
 		LOGGER.debug(">> create() manufacturerDto {}", manufacturerDto);
 
-		Manufacturer manufacturerToPersist = manufacturerMapper.manufacturerDtoToManufacturer(manufacturerDto);
-		Manufacturer manufacturerPersisted =  jpaManufacturerRepository.save(manufacturerToPersist);
-		ManufacturerDto manufacturerDtoPersisted = manufacturerMapper.manufacturerToManufacturerDto(manufacturerPersisted);
+		ManufacturerDto manufacturerDtoPersisted = createOrUpdateManufacturer(manufacturerDto);
 
 		LOGGER.debug("<< create() manufacturerDtoPersisted {}", manufacturerDtoPersisted);
 		return manufacturerDtoPersisted;
@@ -69,9 +67,7 @@ public class JpaManufacturerRepositoryImpl implements ManufacturerRepository {
 	public ManufacturerDto update(ManufacturerDto manufacturerDto) {
 		LOGGER.debug(">> update() manufacturerDto {}", manufacturerDto);
 
-		Manufacturer manufacturerToPersist = manufacturerMapper.manufacturerDtoToManufacturer(manufacturerDto);
-		Manufacturer manufacturerPersisted =  jpaManufacturerRepository.save(manufacturerToPersist);
-		ManufacturerDto manufacturerDtoPersisted = manufacturerMapper.manufacturerToManufacturerDto(manufacturerPersisted);
+		ManufacturerDto manufacturerDtoPersisted = createOrUpdateManufacturer(manufacturerDto);
 
 		LOGGER.debug("<< update() manufacturerDtoPersisted {}", manufacturerDtoPersisted);
 		return manufacturerDtoPersisted;
@@ -86,5 +82,20 @@ public class JpaManufacturerRepositoryImpl implements ManufacturerRepository {
 		LOGGER.debug("<< deleteById() deleted {}", deleted);
 		return deleted;
 	}
+
+	// region Private methods
+
+	private ManufacturerDto createOrUpdateManufacturer(ManufacturerDto manufacturerDto) {
+		LOGGER.trace(">> createOrUpdateManufacturer() manufacturerDto {}", manufacturerDto);
+
+		Manufacturer manufacturerToPersist = manufacturerMapper.manufacturerDtoToManufacturer(manufacturerDto);
+		Manufacturer manufacturerPersisted =  jpaManufacturerRepository.save(manufacturerToPersist);
+		ManufacturerDto manufacturerDtoPersisted = manufacturerMapper.manufacturerToManufacturerDto(manufacturerPersisted);
+
+		LOGGER.trace("<< createOrUpdateManufacturer() manufacturerDtoPersisted {}", manufacturerDtoPersisted);
+		return manufacturerDtoPersisted;
+	}
+
+	// endregion
 
 }

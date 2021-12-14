@@ -35,10 +35,10 @@ public class JpaBeerTypeRepositoryImpl implements BeerTypeRepository {
 		LOGGER.debug(">> getAll()");
 
 		List<BeerType> beerList =  jpaBeerTypeRepository.findAll();
-		List<BeerTypeDto> beerDtoList = beerTypeMapper.beerTypeListToBeerTypeDtoList(beerList);
+		List<BeerTypeDto> beerTypeDtoList = beerTypeMapper.beerTypeListToBeerTypeDtoList(beerList);
 
-		LOGGER.debug("<< getAll() beerDtoList {}", beerDtoList);
-		return beerDtoList;
+		LOGGER.debug("<< getAll() beerTypeDtoList {}", beerTypeDtoList);
+		return beerTypeDtoList;
 	}
 
 	@Override
@@ -46,35 +46,31 @@ public class JpaBeerTypeRepositoryImpl implements BeerTypeRepository {
 		LOGGER.debug(">> getById() id {}", id);
 
 		BeerType beer = jpaBeerTypeRepository.findById(id).orElse(new BeerType());
-		BeerTypeDto beerDto = beerTypeMapper.beerTypeToBeerTypeDto(beer);
-		Optional<BeerTypeDto> beerDtoOptional = Optional.ofNullable(beerDto);
+		BeerTypeDto beerTypeDto = beerTypeMapper.beerTypeToBeerTypeDto(beer);
+		Optional<BeerTypeDto> beerTypeDtoOptional = Optional.ofNullable(beerTypeDto);
 
-		LOGGER.debug("<< getById() beerDtoOptional {}", beerDtoOptional);
-		return beerDtoOptional;
+		LOGGER.debug("<< getById() beerTypeDtoOptional {}", beerTypeDtoOptional);
+		return beerTypeDtoOptional;
 	}
 
 	@Override
-	public BeerTypeDto create(BeerTypeDto beerDto) {
-		LOGGER.debug(">> create() beerDto {}", beerDto);
+	public BeerTypeDto create(BeerTypeDto beerTypeDto) {
+		LOGGER.debug(">> create() beerTypeDto {}", beerTypeDto);
 
-		BeerType beerToPersist = beerTypeMapper.beerTypeDtoToBeerType(beerDto);
-		BeerType beerPersisted =  jpaBeerTypeRepository.save(beerToPersist);
-		BeerTypeDto beerDtoPersisted = beerTypeMapper.beerTypeToBeerTypeDto(beerPersisted);
+		BeerTypeDto beerTypeDtoPersisted = createOrUpdateBeerType(beerTypeDto);
 
-		LOGGER.debug("<< create() beerDtoPersisted {}", beerDtoPersisted);
-		return beerDtoPersisted;
+		LOGGER.debug("<< create() beerTypeDtoPersisted {}", beerTypeDtoPersisted);
+		return beerTypeDtoPersisted;
 	}
 
 	@Override
-	public BeerTypeDto update(BeerTypeDto beerDto) {
-		LOGGER.debug(">> update() beerDto {}", beerDto);
+	public BeerTypeDto update(BeerTypeDto beerTypeDto) {
+		LOGGER.debug(">> update() beerTypeDto {}", beerTypeDto);
 
-		BeerType beerToPersist = beerTypeMapper.beerTypeDtoToBeerType(beerDto);
-		BeerType beerPersisted =  jpaBeerTypeRepository.save(beerToPersist);
-		BeerTypeDto beerDtoPersisted = beerTypeMapper.beerTypeToBeerTypeDto(beerPersisted);
+		BeerTypeDto beerTypeDtoPersisted = createOrUpdateBeerType(beerTypeDto);
 
-		LOGGER.debug("<< update() beerDtoPersisted {}", beerDtoPersisted);
-		return beerDtoPersisted;
+		LOGGER.debug("<< update() beerTypeDtoPersisted {}", beerTypeDtoPersisted);
+		return beerTypeDtoPersisted;
 	}
 
 	@Override
@@ -86,5 +82,20 @@ public class JpaBeerTypeRepositoryImpl implements BeerTypeRepository {
 		LOGGER.debug("<< deleteById() deleted {}", deleted);
 		return deleted;
 	}
+	
+	// region Private methods
+
+	private BeerTypeDto createOrUpdateBeerType(BeerTypeDto beerTypeDto) {
+		LOGGER.trace(">> createOrUpdateBeerType() beerTypeDto {}", beerTypeDto);
+
+		BeerType beerToPersist = beerTypeMapper.beerTypeDtoToBeerType(beerTypeDto);
+		BeerType beerPersisted =  jpaBeerTypeRepository.save(beerToPersist);
+		BeerTypeDto beerTypeDtoPersisted = beerTypeMapper.beerTypeToBeerTypeDto(beerPersisted);
+
+		LOGGER.trace("<< createOrUpdateBeerType() beerTypeDtoPersisted {}", beerTypeDtoPersisted);
+		return beerTypeDtoPersisted;
+	}
+	
+	// endregion
 
 }

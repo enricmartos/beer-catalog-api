@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -31,14 +34,15 @@ public class JpaBeerRepositoryImpl implements BeerRepository {
 	}
 
 	@Override
-	public List<BeerDto> getAll() {
+	public Page<BeerDto> getAll(Pageable pageable) {
 		LOGGER.debug(">> getAll()");
 
-		List<Beer> beerList =  jpaBeerRepository.findAll();
-		List<BeerDto> beerDtoList = beerMapper.beerListToBeerDtoList(beerList);
+		Page<Beer> beerPage = jpaBeerRepository.findAll(pageable);
+		List<BeerDto> beerDtoList = beerMapper.beerListToBeerDtoList(beerPage.getContent());
+		Page<BeerDto> beerDtoPage = new PageImpl<>(beerDtoList, pageable, beerPage.getTotalElements());
 
 		LOGGER.debug("<< getAll() beerDtoList {}", beerDtoList);
-		return beerDtoList;
+		return beerDtoPage;
 	}
 
 	@Override
@@ -57,9 +61,7 @@ public class JpaBeerRepositoryImpl implements BeerRepository {
 	public BeerDto create(BeerDto beerDto) {
 		LOGGER.debug(">> create() beerDto {}", beerDto);
 
-		Beer beerToPersist = beerMapper.beerDtoToBeer(beerDto);
-		Beer beerPersisted =  jpaBeerRepository.save(beerToPersist);
-		BeerDto beerDtoPersisted = beerMapper.beerToBeerDto(beerPersisted);
+		BeerDto beerDtoPersisted = createOrUpdateBeer(beerDto);
 
 		LOGGER.debug("<< create() beerDtoPersisted {}", beerDtoPersisted);
 		return beerDtoPersisted;
@@ -69,9 +71,7 @@ public class JpaBeerRepositoryImpl implements BeerRepository {
 	public BeerDto update(BeerDto beerDto) {
 		LOGGER.debug(">> update() beerDto {}", beerDto);
 
-		Beer beerToPersist = beerMapper.beerDtoToBeer(beerDto);
-		Beer beerPersisted =  jpaBeerRepository.save(beerToPersist);
-		BeerDto beerDtoPersisted = beerMapper.beerToBeerDto(beerPersisted);
+		BeerDto beerDtoPersisted = createOrUpdateBeer(beerDto);
 
 		LOGGER.debug("<< update() beerDtoPersisted {}", beerDtoPersisted);
 		return beerDtoPersisted;
@@ -86,5 +86,20 @@ public class JpaBeerRepositoryImpl implements BeerRepository {
 		LOGGER.debug("<< deleteById() deleted {}", deleted);
 		return deleted;
 	}
+
+	// region Private methods
+
+	private BeerDto createOrUpdateBeer(BeerDto beerDto) {
+		LOGGER.trace(">> createOrUpdateBeer() beerDto {}", beerDto);
+
+		Beer beerToPersist = beerMapper.beerDtoToBeer(beerDto);
+		Beer beerPersisted =  jpaBeerRepository.save(beerToPersist);
+		BeerDto beerDtoPersisted = beerMapper.beerToBeerDto(beerPersisted);
+
+		LOGGER.trace("<< createOrUpdateBeer() beerDtoPersisted {}", beerDtoPersisted);
+		return beerDtoPersisted;
+	}
+
+	// endregion
 
 }
