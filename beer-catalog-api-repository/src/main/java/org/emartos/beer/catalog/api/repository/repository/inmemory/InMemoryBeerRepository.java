@@ -46,6 +46,11 @@ public class InMemoryBeerRepository implements BeerRepository {
 	}
 
 	@Override
+	public Page<BeerDto> getAllByName(String name, Pageable pageable) {
+		return null;
+	}
+
+	@Override
 	public Optional<BeerDto> getById(Long id) {
 		LOGGER.debug(">> findById() id {}", id);
 

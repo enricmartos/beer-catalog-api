@@ -7,6 +7,7 @@ package org.emartos.beer.catalog.api.core.controller;
 
 import org.emartos.beer.catalog.api.core.dto.PageableResponseDto;
 import org.emartos.beer.catalog.api.core.exception.BadRequestException;
+import org.emartos.beer.catalog.api.core.exception.BeerCatalogApiException;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.handler.BeerHandler;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
@@ -45,7 +46,7 @@ public class BeerController {
 
 	@GetMapping(value = "/list", produces = APPLICATION_JSON_VALUE)
 	public PageableResponseDto<BeerDto> getAllBeers(@RequestParam(defaultValue = "0") Integer currentPage,
-													@RequestParam(defaultValue = "3") Integer pageSize,
+													@RequestParam(defaultValue = "25") Integer pageSize,
 													@RequestParam(defaultValue = "id,desc") String[] sort) throws BadRequestException {
 		LOGGER.info(">> getAllBeers() page {} size {} sort {}", currentPage, pageSize, sort);
 
@@ -56,6 +57,22 @@ public class BeerController {
 		LOGGER.info("<< getAllBeers() pageableResponseDto {}", pageableResponseDto);
 		return pageableResponseDto;
 	}
+
+	@GetMapping(value = "/searchByName", produces = APPLICATION_JSON_VALUE)
+	public PageableResponseDto<BeerDto> getAllBeersByName(@RequestParam(defaultValue = "0") Integer currentPage,
+													@RequestParam(defaultValue = "25") Integer pageSize,
+													@RequestParam(defaultValue = "id,desc") String[] sort,
+												    @RequestParam String name) throws BeerCatalogApiException {
+		LOGGER.info(">> getAllBeers() page {} size {} sort {}", currentPage, pageSize, sort);
+
+		Pageable pageRequest = getPageableRequest(currentPage, pageSize, sort);
+		Page<BeerDto> beerDtoPage = beerHandler.getAllBeersByName(name, pageRequest);
+		PageableResponseDto<BeerDto> pageableResponseDto = buildPageableResponseDto(beerDtoPage);
+
+		LOGGER.info("<< getAllBeers() pageableResponseDto {}", pageableResponseDto);
+		return pageableResponseDto;
+	}
+
 
 	@GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public BeerDto getBeerById(@PathVariable Long id) throws NotFoundException {

@@ -1,11 +1,13 @@
 package org.emartos.beer.catalog.api.core.handler.impl;
 
 import org.emartos.beer.catalog.api.core.exception.BadRequestException;
+import org.emartos.beer.catalog.api.core.exception.BeerCatalogApiException;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.handler.BeerHandler;
 import org.emartos.beer.catalog.api.core.helper.BeerValidationHelper;
 import org.emartos.beer.catalog.api.core.service.BeerService;
 import org.emartos.beer.catalog.api.core.service.BeerTypeService;
+import org.emartos.beer.catalog.api.core.service.ExternalBeerService;
 import org.emartos.beer.catalog.api.core.service.ManufacturerService;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
 import org.slf4j.Logger;
@@ -20,11 +22,13 @@ public class BeerHandlerImpl implements BeerHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BeerHandlerImpl.class);
 
 	private final BeerService beerService;
+	private final ExternalBeerService externalBeerService;
 	private final ManufacturerService manufacturerService;
 	private final BeerTypeService beerTypeService;
 
-	public BeerHandlerImpl(BeerService beerService, ManufacturerService manufacturerService, BeerTypeService beerTypeService) {
+	public BeerHandlerImpl(BeerService beerService, ExternalBeerService externalBeerService, ManufacturerService manufacturerService, BeerTypeService beerTypeService) {
 		this.beerService = beerService;
+		this.externalBeerService = externalBeerService;
 		this.manufacturerService = manufacturerService;
 		this.beerTypeService = beerTypeService;
 	}
@@ -45,6 +49,19 @@ public class BeerHandlerImpl implements BeerHandler {
 		LOGGER.debug(">> getAllBeers() {}", pageable);
 
 		Page<BeerDto> beerDtoList = beerService.getAllBeers(pageable);
+
+		LOGGER.debug("<< getAllBeers() beerDtoList {}", beerDtoList);
+		return beerDtoList;
+	}
+
+	@Override
+	public Page<BeerDto> getAllBeersByName(String name, Pageable pageable) throws BeerCatalogApiException {
+		LOGGER.debug(">> getAllBeers() {}", pageable);
+
+		Page<BeerDto> beerDtoList = beerService.getAllBeersByName(name, pageable);
+		if (beerDtoList.getContent().isEmpty()) {
+			beerDtoList = externalBeerService.getAllBeersByName(name, pageable);
+		}
 
 		LOGGER.debug("<< getAllBeers() beerDtoList {}", beerDtoList);
 		return beerDtoList;

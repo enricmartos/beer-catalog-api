@@ -17,9 +17,11 @@ public interface BeerRepository {
 
 	Page<BeerDto> getAll(Pageable pageable);
 
+	Page<BeerDto> getAllByName(String name, Pageable pageable);
+
 	Optional<BeerDto> getById(Long id);
 
-	BeerDto update(BeerDto manufacturerDto);
+	BeerDto update(BeerDto beerDto);
 
 	boolean deleteById(Long id);
 }

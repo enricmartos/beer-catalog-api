@@ -11,6 +11,8 @@ public interface BeerService {
 
 	Page<BeerDto> getAllBeers(Pageable pageable);
 
+	Page<BeerDto> getAllBeersByName(String name, Pageable pageable);
+
 	BeerDto getBeerById(Long id) throws NotFoundException;
 
 	BeerDto updateBeer(BeerDto beerDto) throws NotFoundException;

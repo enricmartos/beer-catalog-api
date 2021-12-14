@@ -46,6 +46,18 @@ public class JpaBeerRepositoryImpl implements BeerRepository {
 	}
 
 	@Override
+	public Page<BeerDto> getAllByName(String name, Pageable pageable) {
+		LOGGER.debug(">> getAll()");
+
+		Page<Beer> beerPage = jpaBeerRepository.findAllByName(name, pageable);
+		List<BeerDto> beerDtoList = beerMapper.beerListToBeerDtoList(beerPage.getContent());
+		Page<BeerDto> beerDtoPage = new PageImpl<>(beerDtoList, pageable, beerPage.getTotalElements());
+
+		LOGGER.debug("<< getAll() beerDtoList {}", beerDtoList);
+		return beerDtoPage;
+	}
+
+	@Override
 	public Optional<BeerDto> getById(Long id) {
 		LOGGER.debug(">> getById() id {}", id);
 

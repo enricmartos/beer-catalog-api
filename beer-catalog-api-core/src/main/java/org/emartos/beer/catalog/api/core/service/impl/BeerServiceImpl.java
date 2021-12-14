@@ -43,6 +43,16 @@ public class BeerServiceImpl implements BeerService {
 	}
 
 	@Override
+	public Page<BeerDto> getAllBeersByName(String name, Pageable pageable) {
+		LOGGER.debug(">> getAllBeers() pageable {}", pageable);
+
+		Page<BeerDto> beerDtoList = beerRepository.getAllByName(name, pageable);
+
+		LOGGER.debug("<< getAllBeers() beerDtoList {}", beerDtoList);
+		return beerDtoList;
+	}
+
+	@Override
 	public BeerDto getBeerById(Long id) throws NotFoundException {
 		LOGGER.debug(">> getBeerById() id {}", id);
 
