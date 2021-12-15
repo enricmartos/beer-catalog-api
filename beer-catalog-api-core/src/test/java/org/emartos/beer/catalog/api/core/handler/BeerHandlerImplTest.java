@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collections;
 
-import static org.emartos.beer.catalog.api.core.BeerCatalogApiCoreTestUtils.*;
+import static org.emartos.beer.catalog.api.core.BeerCatalogApiCoreDataFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -51,60 +51,56 @@ public class BeerHandlerImplTest {
 	@Test
 	public void testCreateBeer() throws NotFoundException, BadRequestException {
 		// Invalid Beer due to Null params (at least one)
-		BeerDto beerDto = getBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
+		BeerDto beerDto = createBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
 		beerDto.setName(null);
 		assertThrows(BadRequestException.class, () -> beerHandler.createBeer(beerDto));
 
 		// Invalid Beer due to Beer Type does not exist
-		BeerDto beerDtoWithNonExistentBeerType = getBeerDto(BEER_ID, NON_EXISTENT_BEER_TYPE_ID, MANUFACTURER_ID);
+		BeerDto beerDtoWithNonExistentBeerType = createBeerDto(BEER_ID, NON_EXISTENT_BEER_TYPE_ID, MANUFACTURER_ID);
 		when(beerTypeService.getBeerTypeById(NON_EXISTENT_BEER_TYPE_ID)).thenThrow(NotFoundException.class);
 		assertThrows(BadRequestException.class, () -> beerHandler.createBeer(beerDtoWithNonExistentBeerType));
 
 		// Invalid Beer due to Manufacturer does not exist
-		BeerDto beerDtoWithNonExistentManufacturer = getBeerDto(BEER_ID, BEER_TYPE_ID, NON_EXISTENT_MANUFACTURER_ID);
+		BeerDto beerDtoWithNonExistentManufacturer = createBeerDto(BEER_ID, BEER_TYPE_ID, NON_EXISTENT_MANUFACTURER_ID);
 		when(manufacturerService.getManufacturerById(NON_EXISTENT_MANUFACTURER_ID)).thenThrow(NotFoundException.class);
 		assertThrows(BadRequestException.class, () -> beerHandler.createBeer(beerDtoWithNonExistentManufacturer));
 
 		// Valid Beer
-		BeerDto validBeerDto = getBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
-		when(beerTypeService.getBeerTypeById(BEER_TYPE_ID)).thenReturn(getBeerTypeDto(BEER_TYPE_ID));
-		when(manufacturerService.getManufacturerById(MANUFACTURER_ID)).thenReturn(getManufacturerDto(MANUFACTURER_ID));
+		BeerDto validBeerDto = createBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
+		when(beerTypeService.getBeerTypeById(BEER_TYPE_ID)).thenReturn(createBeerTypeDto(BEER_TYPE_ID));
+		when(manufacturerService.getManufacturerById(MANUFACTURER_ID)).thenReturn(createManufacturerDto(MANUFACTURER_ID));
 		when(beerService.createBeer(validBeerDto)).thenReturn(validBeerDto);
 		assertEquals(validBeerDto, beerHandler.createBeer(validBeerDto));
 	}
 
 	@Test
-	public void testGetAllBeers() {
-		Page<BeerDto> beerDtoPage = getBeerDtoPage(BEER_ID);
-		when(beerService.getAllBeers(getPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
-		assertEquals(beerDtoPage, beerHandler.getAllBeers(getPageRequestWithDefaultValues()));
-	}
-
-	@Test
-	public void testGetAllBeersByName() throws BeerCatalogApiException {
+	public void testGetAllBeersByParams() throws BeerCatalogApiException {
 		// Non-Empty result in our DB
-		Page<BeerDto> beerDtoPage = getBeerDtoPage(BEER_ID);
-		when(beerService.getAllBeersByName(BEER_NAME, getPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
-		assertEquals(beerDtoPage, beerHandler.getAllBeersByName(BEER_NAME, getPageRequestWithDefaultValues()));
+		Page<BeerDto> beerDtoPage = createBeerDtoPage(BEER_ID);
+		when(beerService.getAllBeersByParams(createFilteredBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
+		assertEquals(beerDtoPage, beerHandler.getAllBeersByParams(createFilteredBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues()));
 
 		// Empty result in our DB
-		when(beerService.getAllBeersByName(NON_EXISTENT_BEER_NAME, getPageRequestWithDefaultValues())).thenReturn(new PageImpl<>(Collections.emptyList()));
-		when(externalBeerService.getAllBeersByName(NON_EXISTENT_BEER_NAME, getPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
-		assertEquals(beerDtoPage, beerHandler.getAllBeersByName(NON_EXISTENT_BEER_NAME, getPageRequestWithDefaultValues()));
+		when(beerService.getAllBeersByParams(createFilteredBeerDto(NON_EXISTENT_BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID),
+				createPageRequestWithDefaultValues())).thenReturn(new PageImpl<>(Collections.emptyList()));
+		when(externalBeerService.getAllBeersByParams(createFilteredBeerDto(NON_EXISTENT_BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID),
+				createPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
+		assertEquals(beerDtoPage, beerHandler.getAllBeersByParams(createFilteredBeerDto(NON_EXISTENT_BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID),
+				createPageRequestWithDefaultValues()));
 	}
 
 	@Test
 	public void testGetBeerById() throws NotFoundException {
-		BeerDto beerDto = getBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
+		BeerDto beerDto = createBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
 		when(beerService.getBeerById(BEER_ID)).thenReturn(beerDto);
 		assertEquals(beerDto, beerHandler.getBeerById(BEER_ID));
 	}
 
 	@Test
 	public void testUpdateBeer() throws NotFoundException, BadRequestException {
-		BeerDto validBeerDto = getBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
-		when(beerTypeService.getBeerTypeById(BEER_TYPE_ID)).thenReturn(getBeerTypeDto(BEER_TYPE_ID));
-		when(manufacturerService.getManufacturerById(MANUFACTURER_ID)).thenReturn(getManufacturerDto(MANUFACTURER_ID));
+		BeerDto validBeerDto = createBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
+		when(beerTypeService.getBeerTypeById(BEER_TYPE_ID)).thenReturn(createBeerTypeDto(BEER_TYPE_ID));
+		when(manufacturerService.getManufacturerById(MANUFACTURER_ID)).thenReturn(createManufacturerDto(MANUFACTURER_ID));
 		when(beerService.updateBeer(validBeerDto)).thenReturn(validBeerDto);
 		assertEquals(validBeerDto, beerHandler.updateBeer(validBeerDto));
 	}

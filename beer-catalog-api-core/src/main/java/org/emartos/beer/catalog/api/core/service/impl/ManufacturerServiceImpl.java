@@ -7,9 +7,9 @@ import org.emartos.beer.catalog.api.repository.repository.ManufacturerRepository
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ManufacturerServiceImpl implements ManufacturerService {
@@ -33,10 +33,10 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	}
 
 	@Override
-	public List<ManufacturerDto> getAllManufacturers() {
+	public Page<ManufacturerDto> getAllManufacturers(Pageable pageable) {
 		LOGGER.debug(">> getAllManufacturers()");
 
-		List<ManufacturerDto> manufacturerDtoList = manufacturerRepository.getAll();
+		Page<ManufacturerDto> manufacturerDtoList = manufacturerRepository.getAll(pageable);
 
 		LOGGER.debug("<< getAllManufacturers() manufacturerDtoList {}", manufacturerDtoList);
 		return manufacturerDtoList;

@@ -2,6 +2,7 @@ package org.emartos.beer.catalog.api.core.service;
 
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
+import org.emartos.beer.catalog.api.repository.model.BeerFilterDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,9 +10,7 @@ public interface BeerService {
 
 	BeerDto createBeer(BeerDto beerDto);
 
-	Page<BeerDto> getAllBeers(Pageable pageable);
-
-	Page<BeerDto> getAllBeersByName(String name, Pageable pageable);
+	Page<BeerDto> getAllBeersByParams(BeerFilterDto beerFilterDto, Pageable pageable);
 
 	BeerDto getBeerById(Long id) throws NotFoundException;
 

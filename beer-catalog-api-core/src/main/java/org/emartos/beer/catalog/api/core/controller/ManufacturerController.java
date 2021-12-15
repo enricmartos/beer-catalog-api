@@ -5,17 +5,19 @@
  */
 package org.emartos.beer.catalog.api.core.controller;
 
+import org.emartos.beer.catalog.api.core.dto.PageableResponseDto;
 import org.emartos.beer.catalog.api.core.exception.BadRequestException;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.handler.ManufacturerHandler;
 import org.emartos.beer.catalog.api.repository.model.ManufacturerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -41,13 +43,17 @@ public class ManufacturerController {
 	}
 
 	@GetMapping(value = "/list", produces = APPLICATION_JSON_VALUE)
-	public List<ManufacturerDto> getAllManufacturers() {
+	public PageableResponseDto<ManufacturerDto> getAllManufacturers(@RequestParam(defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPage,
+													 @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
+													 @RequestParam(defaultValue = DEFAULT_SORTING_PROPERTY_AND_DIRECTION) String[] sort) throws BadRequestException {
 		LOGGER.info(">> getAllManufacturers()");
 
-		List<ManufacturerDto> manufacturerDtoList = manufacturerHandler.getAllManufacturers();
+		Pageable pageRequest = getPageableRequest(currentPage, pageSize, sort);
+		Page<ManufacturerDto> manufacturerDtoPage = manufacturerHandler.getAllManufacturers(pageRequest);
+		PageableResponseDto<ManufacturerDto> manufacturerPageableResponseDto = buildPageableResponseDto(manufacturerDtoPage);
 
-		LOGGER.info("<< getAllManufacturers() manufacturerDtoList {}", manufacturerDtoList);
-		return manufacturerDtoList;
+		LOGGER.info("<< getAllManufacturers() manufacturerPageableResponseDto {}", manufacturerPageableResponseDto);
+		return manufacturerPageableResponseDto;
 	}
 
 	@GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)

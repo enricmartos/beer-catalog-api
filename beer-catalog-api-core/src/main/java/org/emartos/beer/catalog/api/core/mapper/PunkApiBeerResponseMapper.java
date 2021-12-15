@@ -1,4 +1,4 @@
-package org.emartos.beer.catalog.api.core;
+package org.emartos.beer.catalog.api.core.mapper;
 
 import org.emartos.beer.catalog.api.core.dto.punkapi.PunkApiBeerResponseDto;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;

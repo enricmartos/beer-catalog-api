@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Collections;
 import java.util.List;
 
-import static org.emartos.beer.catalog.api.core.BeerCatalogApiCoreTestUtils.getPunkApiBeerResponseDto;
+import static org.emartos.beer.catalog.api.core.BeerCatalogApiCoreDataFactory.createPunkApiBeerResponseDto;
 import static org.emartos.beer.catalog.api.core.helper.HttpHelper.getUrl;
 import static org.emartos.beer.catalog.api.core.helper.HttpHelper.parseResponseEntityToObject;
 import static org.junit.Assert.assertNull;
@@ -30,7 +30,7 @@ public class HttpHelperTest {
 
 	@Test
 	public void testParseResponseEntityToObjectOk() throws BeerCatalogApiException {
-		List<PunkApiBeerResponseDto> punkApiBeerResponseDtoList = Collections.singletonList(getPunkApiBeerResponseDto());
+		List<PunkApiBeerResponseDto> punkApiBeerResponseDtoList = Collections.singletonList(createPunkApiBeerResponseDto());
 		String body = new Gson().toJson(punkApiBeerResponseDtoList);
 		assertEquals(punkApiBeerResponseDtoList, parseResponseEntityToObject(new ResponseEntity<>(body, HttpStatus.OK), new TypeToken<List<PunkApiBeerResponseDto>>() {
 		}.getType(), true));

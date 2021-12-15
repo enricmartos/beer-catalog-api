@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.emartos.beer.catalog.api.core.BeerCatalogApiCoreTestUtils.*;
+import static org.emartos.beer.catalog.api.core.BeerCatalogApiCoreDataFactory.*;
 import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.buildPageableResponseDto;
 import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.getPageableRequest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,9 +20,9 @@ public class PagingAndSortingHelperTest {
 
 	@Test
 	public void testBuildPageableResponseDto() {
-		Page<BeerDto> beerTypeDtoPage = getBeerDtoPage(BEER_ID);
+		Page<BeerDto> beerTypeDtoPage = createBeerDtoPage(BEER_ID);
 
-		PageableResponseDto<BeerDto> expectedPageableResponseDto = getBeerPageableResponseDto(
+		PageableResponseDto<BeerDto> expectedPageableResponseDto = createBeerPageableResponseDto(
 				beerTypeDtoPage.getContent(), 0, 1, 1);
 
 		assertEquals(expectedPageableResponseDto, buildPageableResponseDto(beerTypeDtoPage));
@@ -35,12 +35,12 @@ public class PagingAndSortingHelperTest {
 
 		// Single validSortParam param ASC
 		String[] validSortParam = new String[]{"id","asc"};
-		Pageable expectedPageRequest = getPageRequestWithSingleSortParamAsc(currentPage, pageSize);
+		Pageable expectedPageRequest = createPageRequestWithSingleSortParamAsc();
 		assertEquals(expectedPageRequest, getPageableRequest(currentPage, pageSize, validSortParam));
 
 		// Single validSortParam param DESC
 		validSortParam = new String[]{"id","desc"};
-		expectedPageRequest = getPageRequestWithSingleSortParamDesc(currentPage, pageSize);
+		expectedPageRequest = createPageRequestWithSingleSortParamDesc();
 		assertEquals(expectedPageRequest, getPageableRequest(currentPage, pageSize, validSortParam));
 
 		// Single validSortParam with only sort direction
@@ -53,8 +53,12 @@ public class PagingAndSortingHelperTest {
 
 		// Multiple validSortParam params
 		validSortParam = new String[]{"id,desc","name,asc"};
-		expectedPageRequest = getPageRequestWithMultipleSortParams(currentPage, pageSize);
+		expectedPageRequest = createPageRequestWithMultipleSortParams();
 		assertEquals(expectedPageRequest, getPageableRequest(currentPage, pageSize, validSortParam));
+
+		// Invalid pagination params
+		assertThrows(BadRequestException.class, () -> getPageableRequest(-1, DEFAULT_PAGE_SIZE, new String[]{"id","asc"}));
+		assertThrows(BadRequestException.class, () -> getPageableRequest(DEFAULT_CURRENT_PAGE, 0, new String[]{"id","asc"}));
 	}
 
 }

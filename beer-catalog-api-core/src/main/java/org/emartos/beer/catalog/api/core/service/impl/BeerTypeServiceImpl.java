@@ -7,9 +7,9 @@ import org.emartos.beer.catalog.api.repository.repository.BeerTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BeerTypeServiceImpl implements BeerTypeService {
@@ -33,13 +33,13 @@ public class BeerTypeServiceImpl implements BeerTypeService {
 	}
 
 	@Override
-	public List<BeerTypeDto> getAllBeerTypes() {
+	public Page<BeerTypeDto> getAllBeerTypes(Pageable pageable) {
 		LOGGER.debug(">> getAllBeerTypes()");
 
-		List<BeerTypeDto> beerTypeDtoList = beerTypeRepository.getAll();
+		Page<BeerTypeDto> beerTypeDtoPage = beerTypeRepository.getAll(pageable);
 
-		LOGGER.debug("<< getAllBeerTypes() beerTypeDtoList {}", beerTypeDtoList);
-		return beerTypeDtoList;
+		LOGGER.debug("<< getAllBeerTypes() beerTypeDtoPage {}", beerTypeDtoPage);
+		return beerTypeDtoPage;
 	}
 
 	@Override

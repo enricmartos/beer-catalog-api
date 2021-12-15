@@ -3,6 +3,7 @@ package org.emartos.beer.catalog.api.core.service.impl;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.service.BeerService;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
+import org.emartos.beer.catalog.api.repository.model.BeerFilterDto;
 import org.emartos.beer.catalog.api.repository.repository.BeerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,23 +34,13 @@ public class BeerServiceImpl implements BeerService {
 	}
 
 	@Override
-	public Page<BeerDto> getAllBeers(Pageable pageable) {
+	public Page<BeerDto> getAllBeersByParams(BeerFilterDto beerFilterDto, Pageable pageable) {
 		LOGGER.debug(">> getAllBeers() pageable {}", pageable);
 
-		Page<BeerDto> beerDtoList = beerRepository.getAll(pageable);
+		Page<BeerDto> beerDtoPage = beerRepository.getAllByParams(beerFilterDto, pageable);
 
-		LOGGER.debug("<< getAllBeers() beerDtoList {}", beerDtoList);
-		return beerDtoList;
-	}
-
-	@Override
-	public Page<BeerDto> getAllBeersByName(String name, Pageable pageable) {
-		LOGGER.debug(">> getAllBeers() pageable {}", pageable);
-
-		Page<BeerDto> beerDtoList = beerRepository.getAllByName(name, pageable);
-
-		LOGGER.debug("<< getAllBeers() beerDtoList {}", beerDtoList);
-		return beerDtoList;
+		LOGGER.debug("<< getAllBeers() beerDtoPage {}", beerDtoPage);
+		return beerDtoPage;
 	}
 
 	@Override

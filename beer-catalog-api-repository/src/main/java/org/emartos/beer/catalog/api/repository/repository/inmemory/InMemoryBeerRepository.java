@@ -1,6 +1,7 @@
 package org.emartos.beer.catalog.api.repository.repository.inmemory;
 
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
+import org.emartos.beer.catalog.api.repository.model.BeerFilterDto;
 import org.emartos.beer.catalog.api.repository.repository.BeerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class InMemoryBeerRepository implements BeerRepository {
 	}
 
 	@Override
-	public Page<BeerDto> getAll(Pageable pageable) {
+	public Page<BeerDto> getAllByParams(BeerFilterDto beerFilterDto, Pageable pageable) {
 		LOGGER.debug(">> getAll()");
 
 		List<BeerDto> beerDtoList = new ArrayList<> (beerMap.values());
@@ -43,11 +44,6 @@ public class InMemoryBeerRepository implements BeerRepository {
 
 		LOGGER.debug("<< getAll() beerDtoPage {}", beerDtoList);
 		return beerDtoPage;
-	}
-
-	@Override
-	public Page<BeerDto> getAllByName(String name, Pageable pageable) {
-		return null;
 	}
 
 	@Override

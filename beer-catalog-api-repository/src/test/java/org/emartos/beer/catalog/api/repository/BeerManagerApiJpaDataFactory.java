@@ -7,7 +7,7 @@ import org.emartos.beer.catalog.api.repository.model.BeerDto;
 import org.emartos.beer.catalog.api.repository.model.BeerTypeDto;
 import org.emartos.beer.catalog.api.repository.model.ManufacturerDto;
 
-public class BeerManagerApiJpaTestsUtils {
+public class BeerManagerApiJpaDataFactory {
 
 	public static final String BEER_NAME = "Beer name";
 	public static final String NON_EXISTENT_BEER_NAME = "Non Existent Beer name";
@@ -18,7 +18,7 @@ public class BeerManagerApiJpaTestsUtils {
 	public static final Long MANUFACTURER_ID = 5L;
 	public static final Long NON_EXISTENT_MANUFACTURER_ID = 6L;
 
-	private BeerManagerApiJpaTestsUtils() {
+	private BeerManagerApiJpaDataFactory() {
 		// Default constructor
 	}
 

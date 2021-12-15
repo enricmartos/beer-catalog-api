@@ -2,14 +2,14 @@ package org.emartos.beer.catalog.api.core.service;
 
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.repository.model.ManufacturerDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ManufacturerService {
 
 	ManufacturerDto createManufacturer(ManufacturerDto manufacturerDto);
 
-	List<ManufacturerDto> getAllManufacturers();
+	Page<ManufacturerDto> getAllManufacturers(Pageable pageable);
 
 	ManufacturerDto getManufacturerById(Long id) throws NotFoundException;
 

@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PageableResponseDto<T> {
 
-	private List<T> elementList;
+	private List<T> itemList;
 	private int currentPage;
 	private long totalItems;
 	private int totalPages;

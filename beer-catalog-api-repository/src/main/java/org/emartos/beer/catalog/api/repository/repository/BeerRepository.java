@@ -6,6 +6,7 @@
 package org.emartos.beer.catalog.api.repository.repository;
 
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
+import org.emartos.beer.catalog.api.repository.model.BeerFilterDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,9 +16,7 @@ public interface BeerRepository {
 
 	BeerDto create(BeerDto manufacturerDto);
 
-	Page<BeerDto> getAll(Pageable pageable);
-
-	Page<BeerDto> getAllByName(String name, Pageable pageable);
+	Page<BeerDto> getAllByParams(BeerFilterDto beerFilterDto, Pageable pageable);
 
 	Optional<BeerDto> getById(Long id);
 

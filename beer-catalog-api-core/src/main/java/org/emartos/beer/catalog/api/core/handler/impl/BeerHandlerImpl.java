@@ -9,6 +9,7 @@ import org.emartos.beer.catalog.api.core.service.BeerTypeService;
 import org.emartos.beer.catalog.api.core.service.ExternalBeerService;
 import org.emartos.beer.catalog.api.core.service.ManufacturerService;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
+import org.emartos.beer.catalog.api.repository.model.BeerFilterDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -46,26 +47,16 @@ public class BeerHandlerImpl implements BeerHandler {
 	}
 
 	@Override
-	public Page<BeerDto> getAllBeers(Pageable pageable) {
+	public Page<BeerDto> getAllBeersByParams(BeerFilterDto beerFilterDto, Pageable pageable) throws BeerCatalogApiException {
 		LOGGER.debug(">> getAllBeers() {}", pageable);
 
-		Page<BeerDto> beerDtoList = beerService.getAllBeers(pageable);
-
-		LOGGER.debug("<< getAllBeers() beerDtoList {}", beerDtoList);
-		return beerDtoList;
-	}
-
-	@Override
-	public Page<BeerDto> getAllBeersByName(String name, Pageable pageable) throws BeerCatalogApiException {
-		LOGGER.debug(">> getAllBeers() {}", pageable);
-
-		Page<BeerDto> beerDtoList = beerService.getAllBeersByName(name, pageable);
-		if (beerDtoList.getContent().isEmpty()) {
-			beerDtoList = externalBeerService.getAllBeersByName(name, pageable);
+		Page<BeerDto> beerDtoPage = beerService.getAllBeersByParams(beerFilterDto, pageable);
+		if (beerDtoPage.getContent().isEmpty()) {
+			beerDtoPage = externalBeerService.getAllBeersByParams(beerFilterDto, pageable);
 		}
 
-		LOGGER.debug("<< getAllBeers() beerDtoList {}", beerDtoList);
-		return beerDtoList;
+		LOGGER.debug("<< getAllBeers() beerDtoPage {}", beerDtoPage);
+		return beerDtoPage;
 	}
 
 	@Override

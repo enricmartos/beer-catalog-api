@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.emartos.beer.catalog.api.repository.BeerManagerApiJpaTestsUtils.*;
+import static org.emartos.beer.catalog.api.repository.BeerManagerApiJpaDataFactory.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;

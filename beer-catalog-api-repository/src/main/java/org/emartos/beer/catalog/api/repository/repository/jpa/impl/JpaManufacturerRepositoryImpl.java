@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -31,14 +34,15 @@ public class JpaManufacturerRepositoryImpl implements ManufacturerRepository {
 	}
 
 	@Override
-	public List<ManufacturerDto> getAll() {
+	public Page<ManufacturerDto> getAll(Pageable pageable) {
 		LOGGER.debug(">> getAll()");
 
-		List<Manufacturer> manufacturerList =  jpaManufacturerRepository.findAll();
-		List<ManufacturerDto> manufacturerDtoList = manufacturerMapper.manufacturerListToManufacturerDtoList(manufacturerList);
+		Page<Manufacturer> manufacturerPage = jpaManufacturerRepository.findAll(pageable);
+		List<ManufacturerDto> manufacturerDtoList = manufacturerMapper.manufacturerListToManufacturerDtoList(manufacturerPage.getContent());
+		Page<ManufacturerDto> manufacturerDtoPage = new PageImpl<>(manufacturerDtoList, pageable, manufacturerPage.getTotalElements());
 
 		LOGGER.debug("<< getAll() manufacturerDtoList {}", manufacturerDtoList);
-		return manufacturerDtoList;
+		return manufacturerDtoPage;
 	}
 
 	@Override

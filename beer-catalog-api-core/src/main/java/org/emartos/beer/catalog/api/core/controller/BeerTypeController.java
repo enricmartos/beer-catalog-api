@@ -5,17 +5,19 @@
  */
 package org.emartos.beer.catalog.api.core.controller;
 
+import org.emartos.beer.catalog.api.core.dto.PageableResponseDto;
 import org.emartos.beer.catalog.api.core.exception.BadRequestException;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.handler.BeerTypeHandler;
 import org.emartos.beer.catalog.api.repository.model.BeerTypeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -41,13 +43,17 @@ public class BeerTypeController {
 	}
 
 	@GetMapping(value = "/list", produces = APPLICATION_JSON_VALUE)
-	public List<BeerTypeDto> getAllBeerTypes() {
+	public PageableResponseDto<BeerTypeDto> getAllBeerTypes(@RequestParam(defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPage,
+											 @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
+											 @RequestParam(defaultValue = DEFAULT_SORTING_PROPERTY_AND_DIRECTION) String[] sort) throws BadRequestException {
 		LOGGER.info(">> getAllBeerTypes()");
 
-		List<BeerTypeDto> beerTypeDtoList = beerTypeHandler.getAllBeerTypes();
+		Pageable pageRequest = getPageableRequest(currentPage, pageSize, sort);
+		Page<BeerTypeDto> beerTypeDtoPage = beerTypeHandler.getAllBeerTypes(pageRequest);
+		PageableResponseDto<BeerTypeDto> beerTypePageableResponseDto = buildPageableResponseDto(beerTypeDtoPage);
 
-		LOGGER.info("<< getAllBeerTypes() beerTypeDtoList {}", beerTypeDtoList);
-		return beerTypeDtoList;
+		LOGGER.info("<< getAllBeerTypes() beerTypePageableResponseDto {}", beerTypePageableResponseDto);
+		return beerTypePageableResponseDto;
 	}
 
 	@GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)

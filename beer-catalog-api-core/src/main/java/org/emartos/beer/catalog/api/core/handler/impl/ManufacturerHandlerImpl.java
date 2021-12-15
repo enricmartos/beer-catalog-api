@@ -7,9 +7,9 @@ import org.emartos.beer.catalog.api.core.service.ManufacturerService;
 import org.emartos.beer.catalog.api.repository.model.ManufacturerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static org.emartos.beer.catalog.api.core.helper.ValidationHelper.checkNotNull;
 
@@ -36,13 +36,13 @@ public class ManufacturerHandlerImpl implements ManufacturerHandler {
 	}
 
 	@Override
-	public List<ManufacturerDto> getAllManufacturers() {
+	public Page<ManufacturerDto> getAllManufacturers(Pageable pageable) {
 		LOGGER.debug(">> getAllManufacturers()");
 
-		List<ManufacturerDto> manufacturerDtoList = manufacturerService.getAllManufacturers();
+		Page<ManufacturerDto> manufacturerDtoPage = manufacturerService.getAllManufacturers(pageable);
 
-		LOGGER.debug("<< getAllManufacturers() manufacturerDtoList {}", manufacturerDtoList);
-		return manufacturerDtoList;
+		LOGGER.debug("<< getAllManufacturers() manufacturerDtoPage {}", manufacturerDtoPage);
+		return manufacturerDtoPage;
 	}
 
 	@Override

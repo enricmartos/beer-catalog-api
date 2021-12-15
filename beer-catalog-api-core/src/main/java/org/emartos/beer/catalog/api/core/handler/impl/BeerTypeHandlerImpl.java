@@ -7,9 +7,9 @@ import org.emartos.beer.catalog.api.core.service.BeerTypeService;
 import org.emartos.beer.catalog.api.repository.model.BeerTypeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static org.emartos.beer.catalog.api.core.helper.ValidationHelper.checkNotNull;
 
@@ -36,13 +36,13 @@ public class BeerTypeHandlerImpl implements BeerTypeHandler {
 	}
 
 	@Override
-	public List<BeerTypeDto> getAllBeerTypes() {
+	public Page<BeerTypeDto> getAllBeerTypes(Pageable pageable) {
 		LOGGER.debug(">> getAllBeerTypes()");
 
-		List<BeerTypeDto> beerTypeDtoList = beerTypeService.getAllBeerTypes();
+		Page<BeerTypeDto> beerTypeDtoPage = beerTypeService.getAllBeerTypes(pageable);
 
-		LOGGER.debug("<< getAllBeerTypes() beerTypeDtoList {}", beerTypeDtoList);
-		return beerTypeDtoList;
+		LOGGER.debug("<< getAllBeerTypes() beerTypeDtoPage {}", beerTypeDtoPage);
+		return beerTypeDtoPage;
 	}
 
 	@Override

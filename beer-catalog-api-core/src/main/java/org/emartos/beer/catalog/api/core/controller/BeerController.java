@@ -11,6 +11,7 @@ import org.emartos.beer.catalog.api.core.exception.BeerCatalogApiException;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.handler.BeerHandler;
 import org.emartos.beer.catalog.api.repository.model.BeerDto;
+import org.emartos.beer.catalog.api.repository.model.BeerFilterDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.buildPageableResponseDto;
-import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.getPageableRequest;
+import static org.emartos.beer.catalog.api.core.helper.PagingAndSortingHelper.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -45,32 +45,26 @@ public class BeerController {
 	}
 
 	@GetMapping(value = "/list", produces = APPLICATION_JSON_VALUE)
-	public PageableResponseDto<BeerDto> getAllBeers(@RequestParam(defaultValue = "0") Integer currentPage,
-													@RequestParam(defaultValue = "25") Integer pageSize,
-													@RequestParam(defaultValue = "id,desc") String[] sort) throws BadRequestException {
+	public PageableResponseDto<BeerDto> getAllBeersByParams(
+													@RequestParam(defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPage,
+													@RequestParam(defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
+													@RequestParam(defaultValue = DEFAULT_SORTING_PROPERTY_AND_DIRECTION) String[] sort,
+													@RequestParam(required = false) String name,
+													@RequestParam(required = false) String description,
+													@RequestParam(required = false) Float minGraduation,
+													@RequestParam(required = false) Float maxGraduation,
+													@RequestParam(required = false) Long beerTypeId,
+													@RequestParam(required = false) Long manufacturerId) throws BeerCatalogApiException {
 		LOGGER.info(">> getAllBeers() page {} size {} sort {}", currentPage, pageSize, sort);
 
 		Pageable pageRequest = getPageableRequest(currentPage, pageSize, sort);
-		Page<BeerDto> beerDtoPage = beerHandler.getAllBeers(pageRequest);
-		PageableResponseDto<BeerDto> pageableResponseDto = buildPageableResponseDto(beerDtoPage);
+		BeerFilterDto beerFilterDto = BeerFilterDto.builder().name(name).description(description).minGraduation(minGraduation).maxGraduation(maxGraduation)
+												   .beerTypeId(beerTypeId).manufacturerId(manufacturerId).build();
+		Page<BeerDto> beerDtoPage = beerHandler.getAllBeersByParams(beerFilterDto, pageRequest);
+		PageableResponseDto<BeerDto> beerPageableResponseDto = buildPageableResponseDto(beerDtoPage);
 
-		LOGGER.info("<< getAllBeers() pageableResponseDto {}", pageableResponseDto);
-		return pageableResponseDto;
-	}
-
-	@GetMapping(value = "/searchByName", produces = APPLICATION_JSON_VALUE)
-	public PageableResponseDto<BeerDto> getAllBeersByName(@RequestParam(defaultValue = "0") Integer currentPage,
-													@RequestParam(defaultValue = "25") Integer pageSize,
-													@RequestParam(defaultValue = "id,desc") String[] sort,
-												    @RequestParam String name) throws BeerCatalogApiException {
-		LOGGER.info(">> getAllBeers() page {} size {} sort {}", currentPage, pageSize, sort);
-
-		Pageable pageRequest = getPageableRequest(currentPage, pageSize, sort);
-		Page<BeerDto> beerDtoPage = beerHandler.getAllBeersByName(name, pageRequest);
-		PageableResponseDto<BeerDto> pageableResponseDto = buildPageableResponseDto(beerDtoPage);
-
-		LOGGER.info("<< getAllBeers() pageableResponseDto {}", pageableResponseDto);
-		return pageableResponseDto;
+		LOGGER.info("<< getAllBeers() beerPageableResponseDto {}", beerPageableResponseDto);
+		return beerPageableResponseDto;
 	}
 
 

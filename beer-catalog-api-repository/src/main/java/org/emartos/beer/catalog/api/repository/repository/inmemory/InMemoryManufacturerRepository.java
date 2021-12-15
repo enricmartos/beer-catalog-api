@@ -5,9 +5,15 @@ import org.emartos.beer.catalog.api.repository.repository.ManufacturerRepository
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component
@@ -32,10 +38,10 @@ public class InMemoryManufacturerRepository implements ManufacturerRepository {
 	}
 
 	@Override
-	public List<ManufacturerDto> getAll() {
+	public Page<ManufacturerDto> getAll(Pageable pageable) {
 		LOGGER.debug(">> findAll()");
 
-		List<ManufacturerDto> manufacturerDtoList = new ArrayList<> (manufacturerMap.values());
+		Page<ManufacturerDto> manufacturerDtoList = new PageImpl<>(new ArrayList<> (manufacturerMap.values()));
 
 		LOGGER.debug("<< findById() manufacturerDtoList {}", manufacturerDtoList);
 		return manufacturerDtoList;
