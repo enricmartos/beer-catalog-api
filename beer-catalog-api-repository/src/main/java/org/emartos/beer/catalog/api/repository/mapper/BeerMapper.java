@@ -19,6 +19,8 @@ import java.util.List;
 @Component
 public class BeerMapper {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(BeerMapper.class);
+
 	private final BeerTypeRepository beerTypeRepository;
 	private final ManufacturerRepository manufacturerRepository;
 
@@ -27,8 +29,6 @@ public class BeerMapper {
 		this.beerTypeRepository = beerTypeRepository;
 		this.manufacturerRepository = manufacturerRepository;
 	}
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(BeerMapper.class);
 
 	public BeerDto beerToBeerDto(Beer beer) {
 		LOGGER.debug(">> beerToBeerDto() beer {}", beer);
