@@ -1,4 +1,4 @@
-package org.emartos.beer.catalog.boot;
+package org.emartos.beer.catalog.api.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
