@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.emartos.beer.catalog.api.core.helper.BeerTypeValidationHelper.validateBeerType;
+import static org.emartos.beer.catalog.api.core.helper.ValidationHelper.checkNotNull;
 
 @Service
 public class BeerTypeHandlerImpl implements BeerTypeHandler {
@@ -75,5 +75,17 @@ public class BeerTypeHandlerImpl implements BeerTypeHandler {
 		LOGGER.debug("<< deleteBeerTypeById() deleted {}", deleted);
 		return deleted;
 	}
+
+	// region Private methods
+
+	private void validateBeerType(BeerTypeDto beerTypeDto) throws BadRequestException {
+		checkNullParams(beerTypeDto);
+	}
+
+	private void checkNullParams(BeerTypeDto beerTypeDto) throws BadRequestException {
+		checkNotNull(beerTypeDto.getName(), "name");
+	}
+
+	// endregion
 
 }

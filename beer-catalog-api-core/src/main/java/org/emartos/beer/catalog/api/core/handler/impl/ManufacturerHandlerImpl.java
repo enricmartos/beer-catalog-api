@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.emartos.beer.catalog.api.core.helper.ManufacturerValidationHelper.validateManufacturer;
+import static org.emartos.beer.catalog.api.core.helper.ValidationHelper.checkNotNull;
 
 @Service
 public class ManufacturerHandlerImpl implements ManufacturerHandler {
@@ -75,5 +75,18 @@ public class ManufacturerHandlerImpl implements ManufacturerHandler {
 		LOGGER.debug("<< deleteManufacturerById() deleted {}", deleted);
 		return deleted;
 	}
+
+	// region Private methods
+
+	private void validateManufacturer(ManufacturerDto manufacturerDto) throws BadRequestException {
+		checkNullParams(manufacturerDto);
+	}
+
+	private void checkNullParams(ManufacturerDto manufacturerDto) throws BadRequestException {
+		checkNotNull(manufacturerDto.getName(), "name");
+		checkNotNull(manufacturerDto.getNationality(), "nationality");
+	}
+
+	// endregion
 
 }

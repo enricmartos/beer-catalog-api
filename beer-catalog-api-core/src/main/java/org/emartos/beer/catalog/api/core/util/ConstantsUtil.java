@@ -1,8 +1,8 @@
 package org.emartos.beer.catalog.api.core.util;
 
-public class Constants {
+public class ConstantsUtil {
 
-	private Constants() {
+	private ConstantsUtil() {
 		// Default private constructor
 	}
 

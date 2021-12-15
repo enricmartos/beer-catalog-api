@@ -4,7 +4,6 @@ import org.emartos.beer.catalog.api.core.exception.BadRequestException;
 import org.emartos.beer.catalog.api.core.exception.BeerCatalogApiException;
 import org.emartos.beer.catalog.api.core.exception.NotFoundException;
 import org.emartos.beer.catalog.api.core.handler.BeerHandler;
-import org.emartos.beer.catalog.api.core.helper.BeerValidationHelper;
 import org.emartos.beer.catalog.api.core.service.BeerService;
 import org.emartos.beer.catalog.api.core.service.BeerTypeService;
 import org.emartos.beer.catalog.api.core.service.ExternalBeerService;
@@ -15,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import static org.emartos.beer.catalog.api.core.helper.ValidationHelper.checkNotNull;
 
 @Service
 public class BeerHandlerImpl implements BeerHandler {
@@ -101,18 +102,25 @@ public class BeerHandlerImpl implements BeerHandler {
 	// region Private methods
 
 	private void validateBeer(BeerDto beerDto) throws BadRequestException {
-		BeerValidationHelper.validateBeer(beerDto);
-		try {
-			manufacturerService.getManufacturerById(beerDto.getManufacturerId());
-		} catch (NotFoundException e) {
-			throw new BadRequestException(String.format("Manufacturer with id %s does not exist", beerDto.getManufacturerId()));
-		}
+		checkNullParams(beerDto);
 
 		try {
 			beerTypeService.getBeerTypeById(beerDto.getBeerTypeId());
 		} catch (NotFoundException e) {
 			throw new BadRequestException(String.format("Beer Type with id %s does not exist", beerDto.getBeerTypeId()));
 		}
+
+		try {
+			manufacturerService.getManufacturerById(beerDto.getManufacturerId());
+		} catch (NotFoundException e) {
+			throw new BadRequestException(String.format("Manufacturer with id %s does not exist", beerDto.getManufacturerId()));
+		}
+	}
+
+	private void checkNullParams(BeerDto beerDto) throws BadRequestException {
+		checkNotNull(beerDto.getName(), "name");
+		checkNotNull(beerDto.getDescription(), "description");
+		checkNotNull(beerDto.getGraduation(), "graduation");
 	}
 
 	// endregion

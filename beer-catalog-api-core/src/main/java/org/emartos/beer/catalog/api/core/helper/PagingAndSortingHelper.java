@@ -25,8 +25,10 @@ public class PagingAndSortingHelper {
 				String[] sortSplit = sortOrder.split(",");
 				orders.add(new Sort.Order(getSortDirection(sortSplit[1]), sortSplit[0]));
 			}
-		} else {
+		} else if (sort.length == 2) {
 			orders.add(new Sort.Order(getSortDirection(sort[1]), sort[0]));
+		} else {
+			throw new BadRequestException("Invalid format. The correct format is {sortParam},{sortDirection(asc/desc)}");
 		}
 
 		return PageRequest.of(currentPage, pageSize, Sort.by(orders));

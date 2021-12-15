@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.emartos.beer.catalog.api.core.util.Constants.PUNK_API_EXTERNAL_MANUFACTURER_ID;
+import static org.emartos.beer.catalog.api.core.util.ConstantsUtil.PUNK_API_EXTERNAL_MANUFACTURER_ID;
 
 @Component
 public class PunkApiBeerResponseMapper {
