@@ -24,7 +24,7 @@ For each manufacturer, we want to at least keep track of their name and national
 - Docker-compose 2.3
 
 *API Documentation*
-- Swagger 2.9.2
+- Swagger 3.0.0
 
 ## Build setup
 
@@ -47,7 +47,7 @@ $ mvn spring-boot:run
 
 ## Technical approach
 
-Mandatory tasks
+Accomplished mandatory tasks
 
 1 - REST API implementation without persistence
 2 - REST API implementation with persistence
@@ -57,27 +57,221 @@ In order to implement the mandatory tasks, [Repository Pattern](https://martinfo
 Some technical considerations:
 - The Pagination and Sorting logic is only implemented for the JPA repository. Reading the requirements, I understand that the JPA implementation is the only that needs to support these advanced features. 
 
-Bonus steps
+Accomplished bonus steps
 - Pagination to collection endpoints
 - Beer Search Funcionality
 - Punk API integration as an external source of information
 
 Some technical considerations:
-- The Beer model contains the attributes 'externalId' and 'externalBeerType', which represent the 'id' and the 'beer type' of the External API (in this case, Punk API). Punk API is added as the first manufacturer of the catalog (see the initialization DB script).
+- The Beer model contains the attributes 'externalId' and 'externalBeerType', which represent the 'id' and the 'beer type' of the External API (in this case, Punk API). Punk API is added as the first manufacturer of the catalog (inalization DB script 'database.sql' in resources folder of the boot module). Also the the script 'database.sql' performs the following inserts to have some sample data when starting the application:
+- Manufacturers: Punk API, Hijos de Rivera, Brauerei Gruppe
+- Beer Types: Lager, Ale
+- Beers: Estrella Galicia, Paulaner
 - The Beer search logic is performed by all the attributes. The filter criteria met by the beer retrieved is the following one: The exact name, the description containing the text sent, the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit), and the exact manufacturer id and the beer type id.
 - If there no beers retrieved from our DB after performing a search request, the filter criteria consulting Punk API is the following one: The name containing the text sent, and the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit).
+- The default Pagination and Sorting values are: Current Page = 0, Page Size = 25 and Sort = id,desc.
+- The main status codes of the API are
+- - 200: OK
+- 400: Bad Request
+- 404: Not Found
 
 
 
 ## Validate Use Cases
 
+Base URL: http://localhost:8080/beer-catalog/api 
+
 - Manufacturer Creation
-- Beer Type Creation
-- Beer Creation
-- Beer find by id
-- Beer find by params
-- Update beer 
-- delete beer
+
+#### Manufacturer creation
+POST /manufacturer
+
+**Request Body**
+```json
+{
+  "name": "Mahou-San Miguel",
+  "nationality": "Spanish"
+}
+```
+**Expected response body**
+```json
+{
+  "id": 4,
+  "name": "Mahou-San Miguel",
+  "nationality": "Spanish"
+}
+```
+#### Beer Type creation
+POST /beer/type
+
+**Request Body**
+```json
+{
+  "id": 3,
+  "name": "Indian Pale Ale"
+}
+```
+#### Beer creation
+POST /beer
+
+**Request Body**
+```json
+{
+  "id": 3,
+  "name": "Mahou Cinco Estrellas",
+  "description": "Una cerveza de alta fermentación pero con todo el ADN de una Cinco Estrellas.",
+  "graduation": 4.5,
+  "beerTypeId": 3,
+  "manufacturerId": 4
+}
+```
+**Expected Request Body**
+```json
+{
+  "id": 3,
+  "name": "Mahou Cinco Estrellas",
+  "description": "Una cerveza de alta fermentación pero con todo el ADN de una Cinco Estrellas.",
+  "graduation": 4.5,
+  "beerTypeId": 3,
+  "manufacturerId": 4
+}
+```
+#### Beer retrieval by ID
+GET /beer/3
+
+**Expected Response Body**
+```json
+{
+  "id": 3,
+  "name": "Mahou Cinco Estrellas",
+  "description": "Una cerveza de alta fermentación pero con todo el ADN de una Cinco Estrellas.",
+  "graduation": 4.5,
+  "beerTypeId": 3,
+  "manufacturerId": 4
+}
+```
+#### Search functionality
+#### Beer retrieval by Params (all beers sorted ascendently by graduation)
+GET /beer/list?currentPage=0&pageSize=25&sort=graduation&sort=asc
+
+**Expected Request Body**
+```json
+{
+  "itemList": [
+    {
+      "id": 3,
+      "name": "Mahou Cinco Estrellas",
+      "description": "Una cerveza de alta fermentación pero con todo el ADN de una Cinco Estrellas.",
+      "graduation": 4.5,
+      "beerTypeId": 3,
+      "manufacturerId": 4
+    },
+    {
+      "id": 1,
+      "name": "Estrella Galicia",
+      "description": "Bright golden beer with especially bitter malts",
+      "graduation": 4.7,
+      "beerTypeId": 1,
+      "manufacturerId": 2
+    },
+    {
+      "id": 2,
+      "name": "Paulaner",
+      "description": "Pleasantly malty beer with subtle notes of hops",
+      "graduation": 5.5,
+      "beerTypeId": 2,
+      "manufacturerId": 3
+    }
+  ],
+  "currentPage": 0,
+  "totalItems": 3,
+  "totalPages": 1
+}
+```
+
+#### Beer retrieval by Params (search by name, beer present in the DB)
+GET /beer/list?currentPage=0&pageSize=25&sort=id&sort=desc&name=Paulaner
+**Expected Request Body**
+```json
+{
+  "itemList": [
+    {
+      "id": 2,
+      "name": "Paulaner",
+      "description": "Pleasantly malty beer with subtle notes of hops",
+      "graduation": 5.5,
+      "beerTypeId": 2,
+      "manufacturerId": 3
+    }
+  ],
+  "currentPage": 0,
+  "totalItems": 1,
+  "totalPages": 1
+}
+```
+
+#### Beer retrieval by Params (search by name, beer NOT present in the DB)
+GET /beer/3/list?currentPage=0&pageSize=2&sort=id&sort=desc&name=Berliner
+
+**Expected Request Body**
+```json
+{
+  "itemList": [
+    {
+      "name": "Berliner Weisse With Yuzu - B-Sides",
+      "description": "Japanese citrus fruit intensifies the sour nature of this German classic.",
+      "graduation": 4.2,
+      "externalId": 3,
+      "externalBeerType": "Japanese Citrus Berliner Weisse.",
+      "manufacturerId": 1
+    },
+    {
+      "name": "Berliner Weisse With Raspberries And Rhubarb - B-Sides",
+      "description": "Tart, dry and acidic with a punch of summer berry as rhubarb crumble.",
+      "graduation": 3.6,
+      "externalId": 35,
+      "externalBeerType": "Fruity Berliner Weisse.",
+      "manufacturerId": 1
+    }
+  ],
+  "currentPage": 0,
+  "totalItems": 2,
+  "totalPages": 1
+}
+```
+#### Beer update
+PUT /beer
+
+**Request Body**
+```json
+{
+  "id": 3,
+  "name": "Mahou Cinco Estrellas Session IPA",
+  "description": "La primera Cinco Estrellas que no es una lager, sino una ale;",
+  "graduation": 5.0,
+  "beerTypeId": 3,
+  "manufacturerId": 4
+}
+```
+**Expected Request Body**
+```json
+{
+  "id": 3,
+  "name": "Mahou Cinco Estrellas Session IPA",
+  "description": "La primera Cinco Estrellas que no es una lager, sino una ale.",
+  "graduation": 5,
+  "beerTypeId": 3,
+  "manufacturerId": 4
+}
+```
+#### Beer deletion by ID
+DELETE /beer/3
+
+**Expected Response Body**
+```
+true
+```
+The request to get all the beers can be executed again to make sure that this new beer has been properly deleted.
 
 #### Scenario 1
 - Given the providers defined in the table of the exercise, iterate 10 message deliveries and show the providers used for the destination 0034666111222.
@@ -149,6 +343,7 @@ $ mvn test
 ```
 ## Possible improvements for a future version
 - Nationality, which is a Manufacturer field, could be defined as an Enumerator in order to limit the range of possible values.
+- Validate the length of the text fields (name and description) and return a Bad Request if they are too long
 - Tests on repository layer
 - 2 Missing bonus steps
 - Implement pagination and sortin in inmemory repository implementation.
