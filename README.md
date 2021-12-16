@@ -68,7 +68,7 @@ Please not that if Maven is chosen as a build setup option a MySQL server needs 
 - - Beer Types: _Lager_, _Ale_
 - - Beers: _Estrella Galicia_, _Paulaner_
 - The Beer search logic is performed by all the attributes. The beers retrieved fulfill the following filter criteria: The exact name, the description containing the text sent, the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit), and the exact manufacturer id and the beer type id.
-- If there are no beers retrieved from our DB after performing a search request, Punk API will be consulting with the following filter criteria: The name containing the text sent, and the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit).
+- If there are no beers retrieved from our DB after performing a search request, Punk API will be consulting with the following filter criteria: The exact name, and the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit).
 - The default Pagination and Sorting values of the API are: Current Page = 0, Page Size = 25 and Sort = id,desc.
 - The main status codes of the API are
 - - 200: _OK_
