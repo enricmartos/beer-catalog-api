@@ -47,35 +47,32 @@ $ mvn spring-boot:run
 
 ## Technical approach
 
-Accomplished mandatory tasks
+### Accomplished mandatory tasks
 
 1 - REST API implementation without persistence
 2 - REST API implementation with persistence
 
-In order to implement the mandatory tasks, [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html) has been used to have a common domain repository layer for both In Memory (Mandatory task 1) and JPA (Mandatory task 2) implementations. In this way, the domain repository is agnostic of all the implementations details (such as DB specific methods) and new datasources (such as MongoDB or Redis) can be easily added without changing the logic of the interface clients. So, we have applied the Dependency Inversion Principle of SOLID to achieve loose coupling when interacting with the data layer. The implementation by default is JPA, but it can be replaced with other implementations when injecting the dependency in the service layer.
-
-Some technical considerations:
+#### Some technical considerations:
+- In order to implement the mandatory tasks, [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html) has been used to have a common domain repository layer for both In Memory (Mandatory task 1) and JPA (Mandatory task 2) implementations. In this way, the domain repository is agnostic of all the implementations details (such as DB specific methods) and new datasources (such as MongoDB or Redis) can be easily added without changing the logic of the interface clients. So, we have applied the Dependency Inversion Principle of SOLID to achieve loose coupling when interacting with the data layer. The implementation by default is JPA, but it can be replaced with other implementations when injecting the dependency in the service layer.
 - The Pagination and Sorting logic is only implemented for the JPA repository. Reading the requirements, I understand that the JPA implementation is the only that needs to support these advanced features. 
 
-Accomplished bonus steps
-- Pagination to collection endpoints
-- Beer Search Funcionality
-- Punk API integration as an external source of information
+### Accomplished bonus steps
+2 - Pagination to collection endpoints
+3 - Beer Search Funcionality
+4 - Punk API integration as an external source of information
 
-Some technical considerations:
+#### Some technical considerations:
 - The Beer model contains the attributes 'externalId' and 'externalBeerType', which represent the 'id' and the 'beer type' of the External API (in this case, Punk API). Punk API is added as the first manufacturer of the catalog (inalization DB script 'database.sql' in resources folder of the boot module). Also the the script 'database.sql' performs the following inserts to have some sample data when starting the application:
-- Manufacturers: Punk API, Hijos de Rivera, Brauerei Gruppe
-- Beer Types: Lager, Ale
-- Beers: Estrella Galicia, Paulaner
+- - Manufacturers: _Punk API_, _Hijos de Rivera_, _Brauerei Gruppe_
+- - Beer Types: _Lager_, _Ale_
+- - Beers: _Estrella Galicia_, _Paulaner_
 - The Beer search logic is performed by all the attributes. The filter criteria met by the beer retrieved is the following one: The exact name, the description containing the text sent, the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit), and the exact manufacturer id and the beer type id.
 - If there no beers retrieved from our DB after performing a search request, the filter criteria consulting Punk API is the following one: The name containing the text sent, and the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit).
 - The default Pagination and Sorting values are: Current Page = 0, Page Size = 25 and Sort = id,desc.
 - The main status codes of the API are
-- - 200: OK
-- 400: Bad Request
-- 404: Not Found
-
-
+- - 200: _OK_
+- - 400: _Bad Request_
+- - 404: _Not Found_
 
 ## Validate Use Cases
 
