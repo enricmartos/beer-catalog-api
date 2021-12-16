@@ -102,6 +102,12 @@ POST /beer/type
 **Request Body**
 ```json
 {
+  "name": "Indian Pale Ale"
+}
+```
+**Expected response body**
+```json
+{
   "id": 3,
   "name": "Indian Pale Ale"
 }
