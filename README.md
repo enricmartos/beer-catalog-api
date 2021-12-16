@@ -49,8 +49,8 @@ $ mvn spring-boot:run
 
 ### Accomplished mandatory tasks
 
-**- REST API implementation without persistence
-**- REST API implementation with persistence
+**- REST API implementation without persistence**
+**- REST API implementation with persistence**
 
 #### Some technical considerations:
 - In order to implement the mandatory tasks, [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html) has been used to have a common domain repository layer for both In Memory (Mandatory task 1) and JPA (Mandatory task 2) implementations. In this way, the domain repository is agnostic of all the implementations details (such as DB specific methods) and new datasources (such as MongoDB or Redis) can be easily added without changing the logic of the interface clients. So, we have applied the Dependency Inversion Principle of SOLID to achieve loose coupling when interacting with the data layer. The implementation by default is JPA, but it can be replaced with other implementations when injecting the dependency in the service layer.
