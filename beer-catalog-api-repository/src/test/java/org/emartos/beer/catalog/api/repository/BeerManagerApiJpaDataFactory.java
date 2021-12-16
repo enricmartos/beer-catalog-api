@@ -10,13 +10,9 @@ import org.emartos.beer.catalog.api.repository.model.ManufacturerDto;
 public class BeerManagerApiJpaDataFactory {
 
 	public static final String BEER_NAME = "Beer name";
-	public static final String NON_EXISTENT_BEER_NAME = "Non Existent Beer name";
 	public static final Long BEER_ID = 1L;
-	public static final Long NON_EXISTENT_BEER_ID = 2L;
 	public static final Long BEER_TYPE_ID = 3L;
-	public static final Long NON_EXISTENT_BEER_TYPE_ID = 4L;
 	public static final Long MANUFACTURER_ID = 5L;
-	public static final Long NON_EXISTENT_MANUFACTURER_ID = 6L;
 
 	private BeerManagerApiJpaDataFactory() {
 		// Default constructor
@@ -24,7 +20,7 @@ public class BeerManagerApiJpaDataFactory {
 
 	// region Beer
 
-	public static BeerDto getBeerDto(Long id, Long beerTypeId, Long manufacturerId) {
+	public static BeerDto createBeerDto(Long id, Long beerTypeId, Long manufacturerId) {
 		return BeerDto.builder()
 					  .id(id)
 					  .name(BEER_NAME)
@@ -35,7 +31,7 @@ public class BeerManagerApiJpaDataFactory {
 					  .build();
 	}
 
-	public static Beer getBeer(Long id, Long beerTypeId, Long manufacturerId) {
+	public static Beer createBeer(Long id, Long beerTypeId, Long manufacturerId) {
 		return Beer.builder()
 				   .id(id)
 				   .name(BEER_NAME)
@@ -50,8 +46,15 @@ public class BeerManagerApiJpaDataFactory {
 
 	// region Beer Type
 
-	public static BeerTypeDto getBeerTypeDto(Long id) {
+	public static BeerTypeDto createBeerTypeDto(Long id) {
 		return BeerTypeDto.builder()
+						  .id(id)
+						  .name("Beer Type name")
+						  .build();
+	}
+
+	public static BeerType createBeerType(Long id) {
+		return BeerType.builder()
 						  .id(id)
 						  .name("Beer Type name")
 						  .build();
@@ -61,8 +64,16 @@ public class BeerManagerApiJpaDataFactory {
 
 	// region Manufacturer
 
-	public static ManufacturerDto getManufacturerDto(Long id) {
+	public static ManufacturerDto createManufacturerDto(Long id) {
 		return ManufacturerDto.builder()
+							  .id(id)
+							  .name("Manufacturer name")
+							  .nationality("Nationality")
+							  .build();
+	}
+
+	public static Manufacturer createManufacturer(Long id) {
+		return Manufacturer.builder()
 							  .id(id)
 							  .name("Manufacturer name")
 							  .nationality("Nationality")

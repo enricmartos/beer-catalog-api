@@ -48,14 +48,14 @@ public class BeerHandlerImpl implements BeerHandler {
 
 	@Override
 	public Page<BeerDto> getAllBeersByParams(BeerFilterDto beerFilterDto, Pageable pageable) throws BeerCatalogApiException {
-		LOGGER.debug(">> getAllBeers() {}", pageable);
+		LOGGER.debug(">> getAllBeersByParams() beerFilterDto {} pageable {}", beerFilterDto, pageable);
 
 		Page<BeerDto> beerDtoPage = beerService.getAllBeersByParams(beerFilterDto, pageable);
 		if (beerDtoPage.getContent().isEmpty()) {
 			beerDtoPage = externalBeerService.getAllBeersByParams(beerFilterDto, pageable);
 		}
 
-		LOGGER.debug("<< getAllBeers() beerDtoPage {}", beerDtoPage);
+		LOGGER.debug("<< getAllBeersByParams() beerDtoPage {}", beerDtoPage);
 		return beerDtoPage;
 	}
 

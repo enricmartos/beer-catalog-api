@@ -42,8 +42,8 @@ public class BeerServiceImplTest {
 	@Test
 	public void testGetAllBeersByParams() {
 		Page<BeerDto> beerDtoPage = createBeerDtoPage(BEER_ID);
-		when(beerRepository.getAllByParams(createFilteredBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
-		assertEquals(beerDtoPage, beerService.getAllBeersByParams(createFilteredBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues()));
+		when(beerRepository.getAllByParams(createFilteredBeerDto(BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
+		assertEquals(beerDtoPage, beerService.getAllBeersByParams(createFilteredBeerDto(BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues()));
 	}
 
 	@Test

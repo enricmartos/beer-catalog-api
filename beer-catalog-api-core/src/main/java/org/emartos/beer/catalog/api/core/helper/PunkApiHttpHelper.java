@@ -7,23 +7,30 @@ import static org.emartos.beer.catalog.api.core.helper.HttpHelper.getUrl;
 
 public class PunkApiHttpHelper {
 
+	private static final String CURRENT_PAGE_PARAM = "?page=";
+	private static final String PAGE_SIZE_PARAM = "&per_page=";
+	private static final String BEER_NAME_PARAM = "&beer_name=";
+	private static final String BEER_GRADUATION_MIN_PARAM = "&abv_gt=";
+	private static final String BEER_GRADUATION_MAX_PARAM = "&abv_lt=";
+
 	private PunkApiHttpHelper() {
 		// Private constructor
 	}
 
 	public static String getUrlRequestParams(BeerFilterDto beerFilterDto, Pageable pageable) {
-		String urlWithRequestParams = getUrl("?page=", String.valueOf(pageable.getPageNumber() + 1),
-				"&per_page=", String.valueOf(pageable.getPageSize()));
+		String urlWithRequestParams = getUrl(CURRENT_PAGE_PARAM, String.valueOf(pageable.getPageNumber() + 1), PAGE_SIZE_PARAM, String.valueOf(pageable.getPageSize()));
 		if (beerFilterDto.getName() != null) {
-			urlWithRequestParams = getUrl(urlWithRequestParams, "&beer_name=", beerFilterDto.getName());
+			String punkApiName = beerFilterDto.getName().replace(" ", "_");
+			urlWithRequestParams = getUrl(urlWithRequestParams, BEER_NAME_PARAM, punkApiName);
 		}
 
 		if (beerFilterDto.getMinGraduation() != null && beerFilterDto.getMaxGraduation() != null) {
-			urlWithRequestParams = getUrl(urlWithRequestParams, "&abv_gt=", String.valueOf(beerFilterDto.getMinGraduation()), "&abv_lt=", String.valueOf(beerFilterDto.getMaxGraduation()));
+			urlWithRequestParams = getUrl(urlWithRequestParams, BEER_GRADUATION_MIN_PARAM, String.valueOf(beerFilterDto.getMinGraduation()),
+					BEER_GRADUATION_MAX_PARAM, String.valueOf(beerFilterDto.getMaxGraduation()));
 		} else if (beerFilterDto.getMinGraduation() != null) {
-			urlWithRequestParams = getUrl(urlWithRequestParams, "&abv_gt=", String.valueOf(beerFilterDto.getMinGraduation()));
+			urlWithRequestParams = getUrl(urlWithRequestParams, BEER_GRADUATION_MIN_PARAM, String.valueOf(beerFilterDto.getMinGraduation()));
 		} else if (beerFilterDto.getMaxGraduation() != null) {
-			urlWithRequestParams = getUrl(urlWithRequestParams, "&abv_gt=", String.valueOf(beerFilterDto.getMaxGraduation()));
+			urlWithRequestParams = getUrl(urlWithRequestParams, BEER_GRADUATION_MAX_PARAM, String.valueOf(beerFilterDto.getMaxGraduation()));
 		}
 		return urlWithRequestParams;
 	}

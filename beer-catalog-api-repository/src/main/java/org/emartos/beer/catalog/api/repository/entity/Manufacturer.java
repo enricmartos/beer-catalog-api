@@ -28,6 +28,4 @@ public class Manufacturer {
 	@NotNull
 	private String nationality;
 
-
-
 }

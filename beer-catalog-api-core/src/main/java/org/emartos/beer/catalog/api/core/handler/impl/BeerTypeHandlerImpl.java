@@ -37,7 +37,7 @@ public class BeerTypeHandlerImpl implements BeerTypeHandler {
 
 	@Override
 	public Page<BeerTypeDto> getAllBeerTypes(Pageable pageable) {
-		LOGGER.debug(">> getAllBeerTypes()");
+		LOGGER.debug(">> getAllBeerTypes() pageable {}", pageable);
 
 		Page<BeerTypeDto> beerTypeDtoPage = beerTypeService.getAllBeerTypes(pageable);
 

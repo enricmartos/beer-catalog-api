@@ -42,9 +42,9 @@ public class BeerMapperTest {
 		assertNull(beerMapper.beerDtoToBeer(null));
 
 		// beerDto not null
-		BeerDto beerDto = getBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
+		BeerDto beerDto = createBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
 		Beer beer = beerMapper.beerDtoToBeer(beerDto);
-		Beer expectedBeer = getBeer(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
+		Beer expectedBeer = createBeer(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
 		assertEquals(expectedBeer, beer);
 	}
 
@@ -56,10 +56,10 @@ public class BeerMapperTest {
 		assertNull(beerMapper.beerToBeerDto(Beer.builder().build()));
 
 		// beer not null
-		when(beerTypeRepository.getById(BEER_TYPE_ID)).thenReturn(Optional.of(getBeerTypeDto(BEER_TYPE_ID)));
-		when(manufacturerRepository.getById(MANUFACTURER_ID)).thenReturn(Optional.of(getManufacturerDto(MANUFACTURER_ID)));
-		Beer beer = getBeer(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
-		BeerDto expectedBeerDto = getBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
+		when(beerTypeRepository.getById(BEER_TYPE_ID)).thenReturn(Optional.of(createBeerTypeDto(BEER_TYPE_ID)));
+		when(manufacturerRepository.getById(MANUFACTURER_ID)).thenReturn(Optional.of(createManufacturerDto(MANUFACTURER_ID)));
+		Beer beer = createBeer(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
+		BeerDto expectedBeerDto = createBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID);
 		assertEquals(expectedBeerDto, beerMapper.beerToBeerDto(beer));
 	}
 
@@ -71,11 +71,11 @@ public class BeerMapperTest {
 		assertEquals(new ArrayList<>(), beerMapper.beerListToBeerDtoList(new ArrayList<>()));
 
 		// beerList not empty
-		when(beerTypeRepository.getById(BEER_TYPE_ID)).thenReturn(Optional.of(getBeerTypeDto(BEER_TYPE_ID)));
-		when(manufacturerRepository.getById(MANUFACTURER_ID)).thenReturn(Optional.of(getManufacturerDto(MANUFACTURER_ID)));
-		List<Beer> recipeList = Collections.singletonList(getBeer(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID));
-		List<BeerDto> expectedBeerDtoList = Collections.singletonList(getBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID));
-		assertEquals(expectedBeerDtoList, beerMapper.beerListToBeerDtoList(recipeList));
+		when(beerTypeRepository.getById(BEER_TYPE_ID)).thenReturn(Optional.of(createBeerTypeDto(BEER_TYPE_ID)));
+		when(manufacturerRepository.getById(MANUFACTURER_ID)).thenReturn(Optional.of(createManufacturerDto(MANUFACTURER_ID)));
+		List<Beer> beerList = Collections.singletonList(createBeer(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID));
+		List<BeerDto> expectedBeerDtoList = Collections.singletonList(createBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID));
+		assertEquals(expectedBeerDtoList, beerMapper.beerListToBeerDtoList(beerList));
 	}
 	
 }

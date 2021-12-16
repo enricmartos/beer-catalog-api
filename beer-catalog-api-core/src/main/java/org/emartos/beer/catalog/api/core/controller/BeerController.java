@@ -55,7 +55,8 @@ public class BeerController {
 													@RequestParam(required = false) Float maxGraduation,
 													@RequestParam(required = false) Long beerTypeId,
 													@RequestParam(required = false) Long manufacturerId) throws BeerCatalogApiException {
-		LOGGER.info(">> getAllBeers() page {} size {} sort {}", currentPage, pageSize, sort);
+		LOGGER.info(">> getAllBeersByParams() page {} size {} sort {} name {} description {} minGraduation {} maxGraduation {} beerTypeId {} manufacturerId {}",
+				currentPage, pageSize, sort, name, description, minGraduation, maxGraduation, beerTypeId, manufacturerId);
 
 		Pageable pageRequest = getPageableRequest(currentPage, pageSize, sort);
 		BeerFilterDto beerFilterDto = BeerFilterDto.builder().name(name).description(description).minGraduation(minGraduation).maxGraduation(maxGraduation)
@@ -63,7 +64,7 @@ public class BeerController {
 		Page<BeerDto> beerDtoPage = beerHandler.getAllBeersByParams(beerFilterDto, pageRequest);
 		PageableResponseDto<BeerDto> beerPageableResponseDto = buildPageableResponseDto(beerDtoPage);
 
-		LOGGER.info("<< getAllBeers() beerPageableResponseDto {}", beerPageableResponseDto);
+		LOGGER.info("<< getAllBeersByParams() beerPageableResponseDto {}", beerPageableResponseDto);
 		return beerPageableResponseDto;
 	}
 

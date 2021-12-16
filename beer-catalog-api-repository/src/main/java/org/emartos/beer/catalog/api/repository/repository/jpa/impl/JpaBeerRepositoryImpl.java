@@ -103,8 +103,6 @@ public class JpaBeerRepositoryImpl implements BeerRepository {
 
 		query.orderBy(criteriaSortOrderList);
 
-
-		//count query
 		TypedQuery<Beer> typedQuery = em.createQuery(query.select(root).where(predicateList.toArray(new Predicate[0])));
 		int totalBeerListCount = typedQuery.getResultList().size();
 

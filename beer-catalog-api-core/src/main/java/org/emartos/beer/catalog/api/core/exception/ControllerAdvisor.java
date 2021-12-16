@@ -19,8 +19,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 	private static final String MESSAGE = "message";
 	private static final String SUCCESS = "success";
 
-	// region ExceptionHandler methods
-
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<Object> handleBadRequestException(BadRequestException ex) {
 		LOGGER_ADVISOR.debug(">> handleBadRequestException()");
@@ -60,8 +58,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 		LOGGER_ADVISOR.debug("<< handleException() responseBody {}", body);
 		return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
-	// endregion
 
 	// region Private method
 

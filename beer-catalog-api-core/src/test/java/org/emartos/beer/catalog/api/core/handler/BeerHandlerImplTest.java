@@ -77,15 +77,15 @@ public class BeerHandlerImplTest {
 	public void testGetAllBeersByParams() throws BeerCatalogApiException {
 		// Non-Empty result in our DB
 		Page<BeerDto> beerDtoPage = createBeerDtoPage(BEER_ID);
-		when(beerService.getAllBeersByParams(createFilteredBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
-		assertEquals(beerDtoPage, beerHandler.getAllBeersByParams(createFilteredBeerDto(BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues()));
+		when(beerService.getAllBeersByParams(createFilteredBeerDto(BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
+		assertEquals(beerDtoPage, beerHandler.getAllBeersByParams(createFilteredBeerDto(BEER_TYPE_ID, MANUFACTURER_ID), createPageRequestWithDefaultValues()));
 
 		// Empty result in our DB
-		when(beerService.getAllBeersByParams(createFilteredBeerDto(NON_EXISTENT_BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID),
+		when(beerService.getAllBeersByParams(createFilteredBeerDto(BEER_TYPE_ID, MANUFACTURER_ID),
 				createPageRequestWithDefaultValues())).thenReturn(new PageImpl<>(Collections.emptyList()));
-		when(externalBeerService.getAllBeersByParams(createFilteredBeerDto(NON_EXISTENT_BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID),
+		when(externalBeerService.getAllBeersByParams(createFilteredBeerDto(BEER_TYPE_ID, MANUFACTURER_ID),
 				createPageRequestWithDefaultValues())).thenReturn(beerDtoPage);
-		assertEquals(beerDtoPage, beerHandler.getAllBeersByParams(createFilteredBeerDto(NON_EXISTENT_BEER_ID, BEER_TYPE_ID, MANUFACTURER_ID),
+		assertEquals(beerDtoPage, beerHandler.getAllBeersByParams(createFilteredBeerDto(BEER_TYPE_ID, MANUFACTURER_ID),
 				createPageRequestWithDefaultValues()));
 	}
 

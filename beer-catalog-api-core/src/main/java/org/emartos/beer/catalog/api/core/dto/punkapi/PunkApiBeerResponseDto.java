@@ -16,9 +16,11 @@ public class PunkApiBeerResponseDto {
 	private String id;
 	private String name;
 	private String description;
+
 	@JsonProperty("abv")
 	@SerializedName("abv")
 	private String graduation;
+
 	@JsonProperty("tagline")
 	@SerializedName("tagline")
 	private String beerType;

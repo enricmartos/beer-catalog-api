@@ -34,7 +34,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 
 	@Override
 	public Page<ManufacturerDto> getAllManufacturers(Pageable pageable) {
-		LOGGER.debug(">> getAllManufacturers()");
+		LOGGER.debug(">> getAllManufacturers() pageable {}", pageable);
 
 		Page<ManufacturerDto> manufacturerDtoList = manufacturerRepository.getAll(pageable);
 
