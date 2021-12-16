@@ -21,7 +21,7 @@ For each manufacturer, we want to at least keep track of their name and national
 - Maven 3.5.0
 
 *Containerization*
-- Docker-compose 2.3
+- Docker-compose 1.21.2
 
 *API Documentation*
 - Swagger 3.0.0
