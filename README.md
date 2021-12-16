@@ -78,19 +78,17 @@ $ mvn spring-boot:run
 
 Base URL: http://localhost:8080/beer-catalog/api 
 
-- Manufacturer Creation
-
-#### Manufacturer creation
+**Manufacturer creation**
 POST /manufacturer
 
-**Request Body**
+#### Request Body
 ```json
 {
   "name": "Mahou-San Miguel",
   "nationality": "Spanish"
 }
 ```
-**Expected response body**
+#### Expected response body
 ```json
 {
   "id": 4,
