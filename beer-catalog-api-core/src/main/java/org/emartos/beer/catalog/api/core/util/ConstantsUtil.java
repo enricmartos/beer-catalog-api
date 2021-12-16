@@ -6,6 +6,6 @@ public class ConstantsUtil {
 		// Default private constructor
 	}
 
-	public static final Long PUNK_API_EXTERNAL_MANUFACTURER_ID = 0L;
+	public static final Long PUNK_API_EXTERNAL_MANUFACTURER_ID = 1L;
 
 }

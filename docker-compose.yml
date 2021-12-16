@@ -22,7 +22,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - ${PWD}/migrations:/docker-entrypoint-initdb.d
+      - ${PWD}/beer-catalog-api-boot/src/main/resources/migrations:/docker-entrypoint-initdb.d
     networks:
       - admin
       - torganizer-network
