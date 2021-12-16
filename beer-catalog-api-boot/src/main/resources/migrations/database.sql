@@ -22,7 +22,7 @@ create table if not exists beer_catalog.beer
     id              bigint auto_increment
         primary key,
     name            varchar(100) not null,
-    description     varchar(100) not null,
+    description     varchar(1000) not null,
     graduation      float        not null,
     beer_type_id    bigint       not null,
     manufacturer_id bigint       not null,
