@@ -71,7 +71,7 @@ class BeerCatalogApiDatasource {
 	public DataSource beerCatalogApiDataSource() throws PropertyVetoException {
 		ComboPooledDataSource dataSource = new ComboPooledDataSource();
 		dataSource.setDriverClass(driver);
-		dataSource.setJdbcUrl(url + "?useSSL=false");
+		dataSource.setJdbcUrl(url);
 		dataSource.setUser(username);
 		dataSource.setPassword(password);
 		dataSource.setMinPoolSize(Integer.parseInt(connPoolMinSize));

@@ -11,9 +11,6 @@ services:
       - MYSQL_PASSWORD
     ports:
       - "8080:8080"
-    networks:
-      - application
-      - torganizer-network
     depends_on:
       - mysql
 
@@ -23,12 +20,3 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - ${PWD}/beer-catalog-api-boot/src/main/resources/migrations:/docker-entrypoint-initdb.d
-    networks:
-      - admin
-      - torganizer-network
-
-networks:
-  torganizer-network:
-    name: torganizer-network
-  application:
-  admin:
