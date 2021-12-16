@@ -267,7 +267,7 @@ PUT /beer
 }
 ```
 #### Beer deletion by ID
-DELETE /beer/"id": {beer_created_id}
+DELETE /beer/{beer_created_id}
 
 **Expected Response Body**
 ```
