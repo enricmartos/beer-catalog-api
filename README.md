@@ -192,6 +192,7 @@ GET /beer/list?currentPage=0&pageSize=25&sort=graduation&sort=asc
 
 #### Beer retrieval by Params (search by name, beer present in the DB)
 GET /beer/list?currentPage=0&pageSize=25&sort=id&sort=desc&name=Paulaner
+
 **Expected Request Body**
 ```json
 {
@@ -344,9 +345,9 @@ $ mvn test
 ```
 ## Possible improvements for a future version
 - Nationality, which is a Manufacturer field, could be defined as an Enumerator in order to limit the range of possible values.
-- Validate the length of the text fields (name and description) and return a Bad Request if they are too long
-- Tests on repository layer
-- 2 Missing bonus steps
-- Implement pagination and sortin in inmemory repository implementation.
+- Validate the length of the text fields (name and description) and return a Bad Request if they are too long.
+- Add Unit Tests on repository layer.
+- The 2 missing bonus steps (application securization and file upload for Beer resource)
+- Implement pagination and sorting for In Memory repository implementation.
 
 
