@@ -1,10 +1,8 @@
 # beer-catalog-api
 
-# message-sender-api
-
 ## Description
 
-This REST API represents a beer catalogue composed of different manufacturers (providers). Beer consumers  can look up the beer catalogue in order to inspire future purchases. 
+This REST API represents a beer catalogue composed of different manufacturers (providers). Beer consumers can look up the beer catalogue in order to inspire future purchases. 
 For each manufacturer, we want to at least keep track of their name and nationality and for each beer we want to at least have the following information: beer name, graduation, type, description  and the manufacturer. 
 
 ## Core technologies
@@ -30,7 +28,7 @@ For each manufacturer, we want to at least keep track of their name and national
 
 ## Build setup
 
-- Clone this repo to your local machine. This application can be executed either with Docker or with maven wrapper:
+- Clone this repo to your local machine. This application can be executed either with Docker or with Maven:
 
 ### With Docker
 
@@ -45,19 +43,31 @@ The previous command allows to have Spring Boot and MySQL containers up and runn
 $ mvn spring-boot:run
 ```
 
-- Open your browser and test the application on *http://localhost:8080/beer-catalog/api/swagger-ui.html*. All the API Documentation (Endpoints, Models...) is included here.
+- Open your browser and test the application on *http://localhost:8080/beer-catalog/api/swagger-ui.html*. The API Documentation (Endpoints, Models...) is included there.
 
 ## Technical approach
 
 Mandatory tasks
 
-- REST API implementation without persistence: 
-- REST API implementation with persistence
+1 - REST API implementation without persistence
+2 - REST API implementation with persistence
+
+In order to implement the mandatory tasks, [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html) has been used to have a common domain repository layer for both In Memory (Mandatory task 1) and JPA (Mandatory task 2) implementations. In this way, the domain repository is agnostic of all the implementations details (such as DB specific methods) and new datasources (such as MongoDB or Redis) can be easily added without changing the logic of the interface clients. So, we have applied the Dependency Inversion Principle of SOLID to achieve loose coupling when interacting with the data layer. The implementation by default is JPA, but it can be replaced to other implementation when injecting the dependency in the service layer.
+
+Some technical considerations:
+- The Pagination and Sorting logic is only implemented for the JPA repository. Reading the requirements, I understand that the JPA implementation is the only that needs to support these advanced features. 
 
 Bonus steps
 - Pagination to collection endpoints
 - Beer Search Funcionality
 - Punk API integration as an external source of information
+
+Some technical considerations:
+- The Beer model contains the attributes 'externalId' and 'externalBeerType', which represent the 'id' and the 'beer type' of the External API (in this case, Punk API). Punk API is added as the first manufacturer of the catalog (see the initialization DB script).
+- The Beer search logic is performed by all the attributes. The filter criteria met by the beer retrieved is the following one: The exact name, the description containing the text sent, the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit), and the exact manufacturer id and the beer type id.
+- If there no beers retrieved from our DB after performing a search request, the filter criteria consulting Punk API is the following one: The name containing the text sent, and the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit).
+
+
 
 ## Validate Use Cases
 
@@ -137,8 +147,8 @@ POST http://localhost:8080/api/v1/message/send
 
 $ mvn test
 ```
-## Possible improvements
-- Nationality as Enum
+## Possible improvements for a future version
+- Nationality, which is a Manufacturer field, could be defined as an Enumerator in order to limit the range of possible values.
 - Tests on repository layer
 - 2 Missing bonus steps
 - Implement pagination and sortin in inmemory repository implementation.
