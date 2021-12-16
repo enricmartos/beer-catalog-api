@@ -35,7 +35,7 @@ For each manufacturer, we want to at least keep track of their name and national
 ```
 $ docker-compose up
 ```
-The previous command allows to have Spring Boot and MySQL containers up and running.
+The previous command starts both Spring Boot and MySQL containers.
 
 ### With Maven
 
