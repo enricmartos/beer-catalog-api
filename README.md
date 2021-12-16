@@ -42,7 +42,7 @@ The previous command starts both Spring Boot and MySQL containers.
 ```
 $ mvn spring-boot:run
 ```
-Please not that if Maven is chosen as a build setup option a MySQL server needs to be up and running. Also, the DB params host, user and password need to be replaced in application.properties file of boot module with the new values. Lastly, execute there the inilization DB script 'database.sql' in resources folder of the boot module.
+Please note that if Maven is chosen as a build setup option a MySQL server needs to be up and running. Also, the DB params host, user and password need to be replaced in application.properties file of boot module with the new values. Lastly, execute there the inilization DB script 'database.sql' in resources folder of the boot module.
 
 - Open your browser and test the application on *http://localhost:8080/beer-catalog/api/swagger-ui.html*. The API Documentation (Endpoints, Models...) is included there.
 
@@ -54,7 +54,7 @@ Please not that if Maven is chosen as a build setup option a MySQL server needs 
 - REST API implementation with persistence
 
 #### Some technical considerations:
-- In order to implement the mandatory tasks, [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html) has been used to have a common domain repository layer for both In Memory (Mandatory task 1) and JPA (Mandatory task 2) implementations. In this way, the domain repository is agnostic of all the implementations details (such as DB specific methods) and new datasources (such as MongoDB or Redis) can be easily added without changing the logic of the interface clients. So, we have applied the Dependency Inversion Principle of SOLID to achieve loose coupling when interacting with the data layer. The implementation by default is JPA, but it can be replaced with other implementations when injecting the dependency in the service layer.
+- In order to implement the mandatory tasks, [Repository Pattern](https://martinfowler.com/eaaCatalog/repository.html) has been used to have a common domain repository layer for both In Memory (Mandatory task 1) and JPA (Mandatory task 2) implementations. In this way, the domain repository is agnostic of all the implementations details (such as DB specific methods) and new datasources (such as MongoDB or Redis) can be easily added without changing the logic of the interface clients. So, we have applied the Dependency Inversion Principle of SOLID to achieve loose coupling when interacting with the data layer. The implementation by default is JPA, but it can be replaced with the In Memory implementation when injecting the dependency in the service layer.
 - The Pagination and Sorting logic is only implemented for the JPA repository. Reading the requirements, it's understood that the JPA implementation is the only that needs to support these advanced features. 
 
 ### Accomplished bonus steps
@@ -68,7 +68,7 @@ Please not that if Maven is chosen as a build setup option a MySQL server needs 
 - - Beer Types: _Lager_, _Ale_
 - - Beers: _Estrella Galicia_, _Paulaner_
 - The Beer search logic is performed by all the attributes. The beers retrieved fulfill the following filter criteria: The exact name, the description containing the text sent, the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit), and the exact manufacturer id and the beer type id.
-- If there are no beers retrieved from our DB after performing a search request, Punk API will be consulting with the following filter criteria: The exact name, and the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit).
+- If there are no beers retrieved from our DB after performing a search request, Punk API will be consulted with the following filter criteria: The name containing the text sent, and the graduation between the min and max level (if there is no min level, the retrieved beers will be the ones below the upper limit, and if there is no max level, the retrieved beers will be the ones above the lower limit).
 - The default Pagination and Sorting values of the API are: Current Page = 0, Page Size = 25 and Sort = id,desc.
 - The main status codes of the API are
 - - 200: _OK_
