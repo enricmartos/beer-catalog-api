@@ -42,6 +42,7 @@ The previous command starts both Spring Boot and MySQL containers.
 ```
 $ mvn spring-boot:run
 ```
+Please not that if Maven is chosen as a build setup option a MySQL server needs to be up and running. Also, the DB params host, user and password need to be replaced in application.properties file of boot module with the new values. Lastly, execute there the inilization DB script 'database.sql' in resources folder of the boot module.
 
 - Open your browser and test the application on *http://localhost:8080/beer-catalog/api/swagger-ui.html*. The API Documentation (Endpoints, Models...) is included there.
 
