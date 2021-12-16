@@ -275,67 +275,6 @@ true
 ```
 The request to get all the beers can be executed again to make sure that this new beer has been properly deleted.
 
-#### Scenario 1
-- Given the providers defined in the table of the exercise, iterate 10 message deliveries and show the providers used for the destination 0034666111222.
-- **Expected result**: Given that there are 2 providers (P1 and P3) with the prefix 0034, and they both have the same cost (1), then a random distribution is applied for these two providers. So, most likely distribution will be 5 messages sent by P1 and 5 messages by P3.
-
-#### Scenario 2
-- Given the providers defined in the table of the exercise, iterate 10 message deliveries and show the providers used for the destination 0033777111222.
-- **Expected result**: Given that there is only 1 provider (P3) with this prefix 0033, P3 will send the 10 messages.
-
-### With Swagger
-
-- Go to message-sender-controller endpoint on *http://localhost:8080/swagger-ui.html*
-- Execute the requests below for both scenarios 10 times and verify that the actual result matches the expected result.
-
-#### Scenario 1
-POST http://localhost:8080/api/v1/message/send
-
-**Request Body**
-```json
-{
-  "textToSend": "text test",
-  "toMobileNumber": "0034666111222"
-}
-```
-**Expected response body** for approximately half of the requests should be something like:
-```json
-{
-  "id": "33c415a4-5bf5-4426-b2d2-bc83abd2b8b1",
-  "providerName": "P1"
-}
-```
-And for the other half:
-```json
-{
-  "id": "840c0f5e-f71a-44d2-93f8-dedd724f763a",
-  "providerName": "P3"
-}
-```
-
-#### Scenario 2
-POST http://localhost:8080/api/v1/message/send
-
-**Request Body**:
-```json
-{
-  "textToSend": "text test",
-  "toMobileNumber": "0033777111222"
-}
-```
-**Expected Response body**:
-```json
-{
-  "id": "88ba0a57-e202-48ac-aa2e-3ceda0ebb6ea",
-  "providerName": "P3"
-}
-```
-
-
-### With Postman
-
-- Import [this](https://www.getpostman.com/collections/9e4645b9a9ef475846c2) Postman collection, which contains all the REST API requests and execute like specified in the previous section.
-
 ### Unit tests
 
 ```
