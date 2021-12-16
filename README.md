@@ -347,7 +347,5 @@ $ mvn test
 - Nationality, which is a Manufacturer field, could be defined as an Enumerator in order to limit the range of possible values.
 - Validate the length of the text fields (name and description) and return a Bad Request if they are too long.
 - Add Unit Tests on repository layer.
-- The 2 missing bonus steps (application securization and file upload for Beer resource)
+- Implement the 2 missing bonus steps (application securization and file upload for Beer resource)
 - Implement pagination and sorting for In Memory repository implementation.
-
-
