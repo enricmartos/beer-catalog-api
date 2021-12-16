@@ -92,7 +92,7 @@ POST /manufacturer
 **Expected response body**
 ```json
 {
-  "id": 4,
+  "id": {manufacturer_created_id},
   "name": "Mahou-San Miguel",
   "nationality": "Spanish"
 }
@@ -109,7 +109,7 @@ POST /beer/type
 **Expected response body**
 ```json
 {
-  "id": 3,
+  "id": {beer_type_created_id},
   "name": "Indian Pale Ale"
 }
 ```
@@ -119,37 +119,36 @@ POST /beer
 **Request Body**
 ```json
 {
-  "id": 3,
   "name": "Mahou Cinco Estrellas",
   "description": "Una cerveza de alta fermentación pero con todo el ADN de una Cinco Estrellas.",
   "graduation": 4.5,
-  "beerTypeId": 3,
-  "manufacturerId": 4
+  "beerTypeId": {beer_type_created_id},
+  "manufacturerId": {manufacturer_created_id}
 }
 ```
 **Expected Request Body**
 ```json
 {
-  "id": 3,
+  "id": {beer_created_id},
   "name": "Mahou Cinco Estrellas",
   "description": "Una cerveza de alta fermentación pero con todo el ADN de una Cinco Estrellas.",
   "graduation": 4.5,
-  "beerTypeId": 3,
-  "manufacturerId": 4
+  "beerTypeId": {beer_type_created_id},
+  "manufacturerId": {manufacturer_created_id}
 }
 ```
 #### Beer retrieval by ID
-GET /beer/3
+GET /beer/{beer_created_id}
 
 **Expected Response Body**
 ```json
 {
-  "id": 3,
+  "id": {beer_created_id},
   "name": "Mahou Cinco Estrellas",
   "description": "Una cerveza de alta fermentación pero con todo el ADN de una Cinco Estrellas.",
   "graduation": 4.5,
-  "beerTypeId": 3,
-  "manufacturerId": 4
+  "beerTypeId": {beer_type_created_id},
+  "manufacturerId": {manufacturer_created_id}
 }
 ```
 #### Search functionality
@@ -161,12 +160,12 @@ GET /beer/list?currentPage=0&pageSize=25&sort=graduation&sort=asc
 {
   "itemList": [
     {
-      "id": 3,
+      "id": {beer_created_id},
       "name": "Mahou Cinco Estrellas",
       "description": "Una cerveza de alta fermentación pero con todo el ADN de una Cinco Estrellas.",
       "graduation": 4.5,
-      "beerTypeId": 3,
-      "manufacturerId": 4
+      "beerTypeId": {beer_type_created_id},
+      "manufacturerId": {manufacturer_created_id}
     },
     {
       "id": 1,
@@ -214,7 +213,7 @@ GET /beer/list?currentPage=0&pageSize=25&sort=id&sort=desc&name=Paulaner
 ```
 
 #### Beer retrieval by Params (search by name, beer NOT present in the DB)
-GET /beer/3/list?currentPage=0&pageSize=2&sort=id&sort=desc&name=Berliner
+GET /beer/list?currentPage=0&pageSize=2&sort=id&sort=desc&name=Berliner
 
 **Expected Request Body**
 ```json
@@ -248,27 +247,27 @@ PUT /beer
 **Request Body**
 ```json
 {
-  "id": 3,
+  "id": {beer_created_id},
   "name": "Mahou Cinco Estrellas Session IPA",
   "description": "La primera Cinco Estrellas que no es una lager, sino una ale;",
   "graduation": 5.0,
-  "beerTypeId": 3,
-  "manufacturerId": 4
+  "beerTypeId": {beer_type_created_id},
+  "manufacturerId": {manufacturer_created_id}
 }
 ```
 **Expected Request Body**
 ```json
 {
-  "id": 3,
+  "id": {beer_created_id},
   "name": "Mahou Cinco Estrellas Session IPA",
   "description": "La primera Cinco Estrellas que no es una lager, sino una ale.",
   "graduation": 5,
-  "beerTypeId": 3,
-  "manufacturerId": 4
+  ""beerTypeId": {beer_type_created_id},
+      "manufacturerId": {manufacturer_created_id}
 }
 ```
 #### Beer deletion by ID
-DELETE /beer/3
+DELETE /beer/"id": {beer_created_id}
 
 **Expected Response Body**
 ```
